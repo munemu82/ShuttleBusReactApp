@@ -1,0 +1,11 @@
+.footer{
+    margin-top: 0;
+    border-top: 0.5rem solid #333745;
+}
+.footerContent{
+    border-bottom: 1px solid lighten($light-blue, 10%);
+    display: flex;
+    justify-content: space-between;
+    padding: $l-size $m-size;
+    color: white;
+}

@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Header correctly 1`] = `
+<header>
+  <div
+    className="topArea"
+  >
+    <img
+      className="logoImg"
+      src="./images/logo.jpg"
+    />
+    <p>
+      <br />
+      <a
+        className="fa fa-facebook"
+        href="#"
+      />
+      <a
+        className="fa fa-twitter"
+        href="#"
+      />
+      <a
+        className="fa fa-google"
+        href="#"
+      />
+      <a
+        className="fa fa-linkedin"
+        href="#"
+      />
+      <a
+        className="fa fa-youtube"
+        href="#"
+      />
+      <br />
+      <br />
+      <span
+        className="glyphicon glyphicon-phone"
+      >
+         1300-WEST-X-SOUTHWEST
+      </span>
+    </p>
+  </div>
+  <div>
+    <ul
+      className="headerNav"
+    >
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          exact={true}
+          to="/"
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          exact={true}
+          to="/dashboard"
+        >
+          Dashboard
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          to="/create"
+        >
+          Book a Ride
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          to="/partners"
+        >
+          Partners
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          to="/aboutUs"
+        >
+          About Us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          activeClassName="is-active"
+          ariaCurrent="true"
+          to="/contactUs"
+        >
+          Contact Us
+        </NavLink>
+      </li>
+    </ul>
+  </div>
+</header>
+`;

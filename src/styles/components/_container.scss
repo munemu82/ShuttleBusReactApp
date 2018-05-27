@@ -1,0 +1,11 @@
+.container {
+  max-width: $main_container;
+  margin: 0 auto;
+  padding: 0 $m-size;
+}
+.content {
+  background: white;
+  max-width: $main_container;
+  margin-top: 0;
+  padding: 0 $m-size;
+}
