@@ -1,11 +1,12 @@
 import React from 'react';
 import moment from 'moment';
+import BookingFormResult from './BookingFormResult';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { SingleDatePicker } from 'react-dates';
-import AddressInputFieldFunc, { SingleInputField } from './bookingForm/bookingFormFields';
+import AddressInputFieldFunc, { SingleInputField, CheckboxOrRadioGroup } from './bookingForm/bookingFormFields';
 import calculateDistance, {getLatLonFromAddress, getDistanceFromLatLonInKm } from '../geocoding/locationCoding';
 import 'react-dates/lib/css/_datepicker.css';
-import { convertDateToMilliseconds, getDateFromMillisec, isAllowedBooking } from '../utilities/manageDates';
+import { convertDateToMilliseconds, getDateFromMillisec, isAllowedBooking, getTimeFromDate } from '../utilities/manageDates';
 import Form, { Button, ControlLabel, FormControl} from 'react-bootstrap';
 import Request from 'superagent';
 import SelectField from './bookingForm/SelectField';
@@ -20,17 +21,20 @@ export default class BookingForm extends React.Component {
             pickupAddress: props.booking ? props.booking.pickupAddress : '',
             destinationAddress: props.booking ? props.booking.destinationAddress : '',
             pickupDate:props.booking ? moment(props.booking.pickupDate) : moment(),
-            createdAt: 0, bookingTime: '10:00',
-            calendarFocused: false,
-            error: {clientNameError: '', pickupAddressError:'', destAddressError:''},
+            createdAt: 0, bookingTime: getTimeFromDate( moment().valueOf()),
+            calendarFocused: false, 
+            error: {clientNameError: '', pickupAddressError:'', destAddressError:'', selectedNoOfPassAdultError: ''},
             computedDistance: 0, computedDuration: 0,
             isSubmit: false,
             tripPrice: 0,
-            noOfAdultPassenrsOptions: [],noOfChildrenPassenrsOptions: [],
-            selectedNoOfAdultsOption: '', selectedNoOfChildrenOption: '',
+            bookingData: {clientName: ''},
+            bookingTimeAllowed: '',
+            noOfAdultPassenrsOptions: [],noOfChildrenPassenrsOptions: [],paymentOptions: [],
+            selectedNoOfAdultsOption: '', selectedNoOfChildrenOption: '', selectedPayment: '',
             noOfHoursBeforePickup: '',
             baseBookingFare: '', farePerMinute:'', farePerKm:''
         };
+        this.handlePaymentOptionSelection = this.handlePaymentOptionSelection.bind(this);
     }
     componentDidMount() {
 		fetch('./form_config.json')
@@ -43,10 +47,12 @@ export default class BookingForm extends React.Component {
                     noOfHoursBeforePickup: data.noOfHoursBeforePickup,
                     baseBookingFare: data.baseBookingFare,
                     farePerMinute: data.farePerMinute,
-                    farePerKm: data.farePerKm
+                    farePerKm: data.farePerKm,
+                    paymentOptions: data.paymentOptions
 				});
             });
-	}
+    }
+    //FORM PROCESSING HANDLERS
     onClientNameChange = (e) => {
         const clientName = e.target.value;
         this.setState( () => ({clientName}))
@@ -61,11 +67,6 @@ export default class BookingForm extends React.Component {
     };
     onFocusChange = ({ focused }) => {
         this.setState( () => ({ calendarFocused: focused }));
-        if(this.state.pickupAddress !=='' && this.state.destinationAddress!==''){
-            const distanceData = calculateDistance(this.state.pickupAddress, this.state.destinationAddress);
-            this.setState(() => ({computedDistance: distanceData[0]}));
-            this.setState(() => ({computedDuration: distanceData[1]}));
-        }
     };
     handleChangePAddress = (pickupAddress) => {
         this.setState({ pickupAddress });
@@ -73,26 +74,45 @@ export default class BookingForm extends React.Component {
             error.pickupAddressError = '';
             this.setState( () => ({error}));
     }
-    handleChangeDAddress = (destinationAddress) => {
-        this.setState({ destinationAddress });
+    handleChangeDAddress = (destinationAddress) => {this.setState({ destinationAddress });
+        let error = Object.assign({}, this.state.error);
+        error.destAddressError = '';
+        this.setState( () => ({error}));
     };
     handleNoOfAdultSelect = (e) => {
         const selectedOption = e.target.value;
         this.setState({ selectedNoOfAdultsOption: selectedOption}, () => console.log('Selected No. Of passenger', this.state.selectedNoOfAdultsOption));
+        let error = Object.assign({}, this.state.error);
+            error.selectedNoOfPassAdultError = '';
+            this.setState( () => ({error}));
     };
-    
     handleNoOfChildrenSelect = (e) => {
         const selectedOption = e.target.value;
         this.setState({ selectedNoOfChildrenOption: selectedOption}, () => console.log('Selected No. Of passenger', this.state.selectedNoOfChildrenOption));
     };
-    onTimeChange = bookingTime => this.setState({ bookingTime })
+    handlePaymentOptionSelection(e) {
+        //const selectedPayment = e.target.value;
+        //console.log(selectedPayment);
+        //console.log(typeof(selectedPayment));
+        this.setState({ selectedPayment: e.target.value});
+        console.log(this.state.selectedPayment);
+	}
+    onTimeChange = bookingTime => {
+        this.setState({ bookingTime });
+        if(this.state.pickupAddress !=='' && this.state.destinationAddress!==''){
+            const distanceData = calculateDistance(this.state.pickupAddress, this.state.destinationAddress);
+            this.setState(() => ({computedDistance: distanceData[0]}));
+            this.setState(() => ({computedDuration: distanceData[1]}));
+        }
+    } 
     //Form submission handler
     onSubmit = (e) =>{
-        this.setState( () => ({isSubmit: true}));
         e.preventDefault();
         let error = Object.assign({}, this.state.error);
+        let bookingData = Object.assign({}, this.state.bookingData);
        console.log(isAllowedBooking(this.state.pickupDate, this.state.bookingTime, this.state.noOfHoursBeforePickup));
-        if(this.state.clientName===''){
+       console.log(this.state.bookingTime);
+       if(this.state.clientName===''){
             error.clientNameError = 'Client name is a required field, please enter your details';
             this.setState( () => ({error}));
         }
@@ -100,22 +120,43 @@ export default class BookingForm extends React.Component {
             error.pickupAddressError = 'Pickup address is a required field, please enter your details';
             this.setState( () => ({error}));
         }
-        if(this.state.clientName && this.state.pickupAddress && this.state.destinationAddress){
-            this.setState( () => ({error: ''}));
-            this.props.onSubmit({
-                clientName: this.state.clientName,
-                pickupAddress: this.state.pickupAddress,
-                destinationAddress: this.state.destinationAddress,
-                createdAt: moment().valueOf(),
-                pickupDate:this.state.pickupDate.valueOf()
-            });
-            const finalDateTime = convertDateToMilliseconds(this.state.pickupDate.valueOf(),'06:43:00: PM'); 
-           //dateInMils + timeInMils;
-            console.log(finalDateTime);
-            console.log(moment(finalDateTime).format("DD MMM YYYY HH:mm:ss A"));
-            console.log("Form submitted successfylly");
+        if(this.state.destinationAddress===''){
+            error.destAddressError = 'Destination address is a required field, please enter your details';
+            this.setState( () => ({error}));
+        }
+        if(this.state.selectedNoOfAdultsOption===''){
+            error.selectedNoOfPassAdultError = 'You must select at least 1 from the options list';
+            this.setState( () => ({error}));
+        }
+        if(this.state.clientName && this.state.pickupAddress && this.state.destinationAddress 
+            && this.state.selectedNoOfAdultsOption){
+                bookingData.BookingFormResult = this.state.clientName;
+                this.setState( () => ({bookingData}));
+                if(isAllowedBooking(this.state.pickupDate, this.state.bookingTime, this.state.noOfHoursBeforePickup)){
+                    this.setState( () => ({error}));  //reset error to empty object
+                    this.setState( () => ({isSubmit: true}));
+                    //calculate booking trip price
+                    const price = computeBookingFare(this.state.computedDistance, this.state.computedDuration, 
+                        this.state.baseBookingFare, this.state.farePerMinute, this.state.farePerKm);
+                    this.setState(() =>({tripPrice : price}));   
+                    this.props.onSubmit({
+                        clientName: this.state.clientName,
+                        pickupAddress: this.state.pickupAddress,
+                        destinationAddress: this.state.destinationAddress,
+                        createdAt: moment().valueOf(),
+                        pickupDate:this.state.pickupDate.valueOf()
+                    });
+                    console.log("Form submitted successfylly");
+               }else{
+                    this.setState( () => ({bookingTimeAllowed: `Booking pickup date and time must be at least ${this.state.noOfHoursBeforePickup} hours after current time`}));
+               }
+                
         }
     };
+    processConfirm = (e) =>{
+        e.preventDefault();
+        console.log('Confirmation submitted successfully!')
+    }
     render(){
         return (
             <div >
@@ -125,7 +166,9 @@ export default class BookingForm extends React.Component {
                 </div>
                 <div className="card-body">
                    <p>{this.state.computedDistance}</p>
-                    <form onSubmit={this.onSubmit}>
+                   {this.state.bookingTimeAllowed && !this.state.isSubmit && <div className="alert alert-danger">{this.state.bookingTimeAllowed}</div>}
+                {!this.state.isSubmit &&
+                 <form onSubmit={this.onSubmit}>
                         <SingleInputField
                             inputType={'text'}
                             title={'Client Name'}
@@ -147,10 +190,10 @@ export default class BookingForm extends React.Component {
                         <ControlLabel>Destination Address</ControlLabel>
                         <PlacesAutocomplete   // Using Google placess API
                             value={this.state.destinationAddress}
-                            onChange={this.handleChangeDAddress}
-                        >
+                            onChange={this.handleChangeDAddress} >
                         {AddressInputFieldFunc}
                         </PlacesAutocomplete>
+                        {this.state.error.destAddressError &&  <div className="errorMessage">{this.state.error.destAddressError}</div>}
                         <br />
                         <div className="form-row">
                             <div className="col">
@@ -169,8 +212,7 @@ export default class BookingForm extends React.Component {
                                 <TimePicker
                                     onChange={this.onTimeChange}
                                     value={this.state.bookingTime}
-                                    required={true}
-                                />
+                                    required={true} />
                             </div>
                         </div>
                         <div className="form-row">
@@ -182,9 +224,9 @@ export default class BookingForm extends React.Component {
                                 placeholder={'Choose(1,2...5)'}
                                 controlFunc={this.handleNoOfAdultSelect}
                                 options={this.state.noOfAdultPassenrsOptions}
-                                selectedOption={this.state.selectedNoOfAdultsOption} 
-                            />
-                            </div>
+                                selectedOption={this.state.selectedNoOfAdultsOption} />
+                                {this.state.error.selectedNoOfPassAdultError &&  <div className="errorMessage">{this.state.error.selectedNoOfPassAdultError}</div>}
+                             </div>
                             <div className="col">
                             <ControlLabel>No. Of children:</ControlLabel>
                             <SelectField
@@ -192,17 +234,29 @@ export default class BookingForm extends React.Component {
                                 placeholder={'Choose(1,2...5)'}
                                 controlFunc={this.handleNoOfChildrenSelect}
                                 options={this.state.noOfChildrenPassenrsOptions}
-                                selectedOption={this.state.selectedNoOfChildrenOption} 
-                            />
-                            </div>
+                                selectedOption={this.state.selectedNoOfChildrenOption} />
                         </div>
-                        <br />
-                        <div>
-                        <button type="submit" className="btn btn-Secondary btn-lg">Submit</button>
                         </div>
-                    </form>
+                        <div><button type="submit" className="btn btn-Secondary btn-lg">Submit</button> </div>
+                    </form>}
                  </div>
-                    <p>Test</p>
+                 {//COMFIRMATION FORM GET DISPLAYED HERE
+                 }
+                   {this.state.isSubmit && <div>
+                   <p>Hello {this.state.clientName}, your booking details are:</p>
+                   <p>To finalize your booking select your payment option below </p>
+                   <form onSubmit={this.processConfirm}>
+                    <CheckboxOrRadioGroup
+                        title={'Select Payment option:'}
+                        setName={'paymentOption'}
+                        type={'checkbox'}
+                        controlFunc={this.handlePaymentOptionSelection}
+                        options={this.state.paymentOptions}
+                        selectedOptions={this.state.selectedPayment} />
+                    <button> Confirm booking </button>
+                    </form>
+                   </div>
+                   }
                  </div>   
 
             </div>

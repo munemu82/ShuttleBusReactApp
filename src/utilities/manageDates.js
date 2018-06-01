@@ -11,7 +11,7 @@ export const convertDateToMilliseconds = (dateTimeInMills, timePart) => {
 } 
 //Extract date from moment date (i.e. date in milliseconds)
 export const getDateFromMillisec = (dateInMillis) => moment(dateInMillis).format("DD/MM/YYYY");
-
+export const getTimeFromDate = (dateInMillisec) => moment(dateInMillisec).format("H:mm");
 
 //Check if input time is great than current time
 export const isAllowedBooking = (pickUpdate, pickupTime, hours) =>{
