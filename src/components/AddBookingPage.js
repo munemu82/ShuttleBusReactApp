@@ -1,6 +1,5 @@
 import React from 'react';
 import BookingForm from './BookingForm';
-import BookingFormResult from './BookingFormResult'
 import { connect } from 'react-redux';
 import { submitBooking } from '../actions/bookings';
 
@@ -12,8 +11,7 @@ const AddBookingPage = (props) => (
       onSubmit = { (booking) => {
         console.log(booking.clientName);
         props.dispatch(submitBooking(booking));   //submit the booking to the store
-       // props.history.push('/dashboard'); //this is to redirect to home page
-       //props.history.push('/bookings/newBooking');
+        props.history.push('/dashboard'); //this is to redirect to home page
       }}
     />
   </div>

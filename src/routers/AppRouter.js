@@ -7,7 +7,6 @@ import AboutUsPage from '../components/AboutUsPage';
 import PartnersPage from '../components/PartnersPage';
 import ContactUsPage from '../components/ContactUsPage';
 import DashboardPage from '../components/DashboardPage';
-import BookingConfirmPage from '../components/BookingConfirmPage';
 import NotFoundPage from '../components/NotFoundPage';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -24,7 +23,6 @@ const AppRouter = () => (
         <Route path="/aboutUs" component={AboutUsPage} />
         <Route path="/partners" component={PartnersPage} />
         <Route path="/contactUs" component={ContactUsPage} />
-        <Route path="/bookings/newBooking" component={BookingConfirmPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />

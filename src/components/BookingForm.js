@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import BookingFormResult from './BookingFormResult';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { SingleDatePicker } from 'react-dates';
 import AddressInputFieldFunc, { SingleInputField, CheckboxOrRadioGroup } from './bookingForm/bookingFormFields';
@@ -28,7 +27,7 @@ export default class BookingForm extends React.Component {
             isSubmit: false,
             tripPrice: 0,
             bookingData: {clientName: ''},
-            bookingTimeAllowed: '',
+            bookingTimeAllowed: '', bookingStep: 'New Booking - Creation',
             noOfAdultPassenrsOptions: [],noOfChildrenPassenrsOptions: [],paymentOptions: [],
             selectedNoOfAdultsOption: '', selectedNoOfChildrenOption: '', selectedPayment: '',
             noOfHoursBeforePickup: '',
@@ -91,9 +90,6 @@ export default class BookingForm extends React.Component {
         this.setState({ selectedNoOfChildrenOption: selectedOption}, () => console.log('Selected No. Of passenger', this.state.selectedNoOfChildrenOption));
     };
     handlePaymentOptionSelection(e) {
-        //const selectedPayment = e.target.value;
-        //console.log(selectedPayment);
-        //console.log(typeof(selectedPayment));
         this.setState({ selectedPayment: e.target.value});
         console.log(this.state.selectedPayment);
 	}
@@ -130,7 +126,6 @@ export default class BookingForm extends React.Component {
         }
         if(this.state.clientName && this.state.pickupAddress && this.state.destinationAddress 
             && this.state.selectedNoOfAdultsOption){
-                bookingData.BookingFormResult = this.state.clientName;
                 this.setState( () => ({bookingData}));
                 if(isAllowedBooking(this.state.pickupDate, this.state.bookingTime, this.state.noOfHoursBeforePickup)){
                     this.setState( () => ({error}));  //reset error to empty object
@@ -139,13 +134,7 @@ export default class BookingForm extends React.Component {
                     const price = computeBookingFare(this.state.computedDistance, this.state.computedDuration, 
                         this.state.baseBookingFare, this.state.farePerMinute, this.state.farePerKm);
                     this.setState(() =>({tripPrice : price}));   
-                    this.props.onSubmit({
-                        clientName: this.state.clientName,
-                        pickupAddress: this.state.pickupAddress,
-                        destinationAddress: this.state.destinationAddress,
-                        createdAt: moment().valueOf(),
-                        pickupDate:this.state.pickupDate.valueOf()
-                    });
+                    this.setState(() =>({bookingStep: 'New Booking - Confirmation'}));
                     console.log("Form submitted successfylly");
                }else{
                     this.setState( () => ({bookingTimeAllowed: `Booking pickup date and time must be at least ${this.state.noOfHoursBeforePickup} hours after current time`}));
@@ -155,6 +144,15 @@ export default class BookingForm extends React.Component {
     };
     processConfirm = (e) =>{
         e.preventDefault();
+        console.log(this.state.selectedPayment);
+        console.log(this.state.clientName);
+        this.props.onSubmit({
+            clientName: this.state.clientName,
+            pickupAddress: this.state.pickupAddress,
+            destinationAddress: this.state.destinationAddress,
+            createdAt: moment().valueOf(),
+            pickupDate:this.state.pickupDate.valueOf()
+        });
         console.log('Confirmation submitted successfully!')
     }
     render(){
@@ -162,7 +160,7 @@ export default class BookingForm extends React.Component {
             <div >
                 <div className="card">
                 <div className="card-header">
-                    <h1> Create a booking </h1>
+                    <h1>{this.state.bookingStep}</h1>
                 </div>
                 <div className="card-body">
                    <p>{this.state.computedDistance}</p>
