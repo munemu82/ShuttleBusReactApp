@@ -19,7 +19,7 @@ export default class BookingForm extends React.Component {
             clientName: props.booking ? props.booking.clientName : '',
             pickupAddress: props.booking ? props.booking.pickupAddress : '',
             destinationAddress: props.booking ? props.booking.destinationAddress : '',
-            pickupDate:props.booking ? moment(props.booking.pickupDate) : moment(),
+            pickupDate:props.booking ? moment(props.booking.pickupDate) : moment().subtract(1, "days"),
             createdAt: 0, bookingTime: getTimeFromDate( moment().valueOf()),
             calendarFocused: false, 
             error: {clientNameError: '', pickupAddressError:'', destAddressError:'', selectedNoOfPassAdultError: ''},
@@ -65,6 +65,11 @@ export default class BookingForm extends React.Component {
         }
     };
     onFocusChange = ({ focused }) => {
+        if(this.state.pickupAddress !=='' && this.state.destinationAddress!==''){
+            const distanceData = calculateDistance(this.state.pickupAddress, this.state.destinationAddress);
+            this.setState(() => ({computedDistance: distanceData[0]}));
+            this.setState(() => ({computedDuration: distanceData[1]}));
+        }
         this.setState( () => ({ calendarFocused: focused }));
     };
     handleChangePAddress = (pickupAddress) => {
@@ -95,11 +100,6 @@ export default class BookingForm extends React.Component {
 	}
     onTimeChange = bookingTime => {
         this.setState({ bookingTime });
-        if(this.state.pickupAddress !=='' && this.state.destinationAddress!==''){
-            const distanceData = calculateDistance(this.state.pickupAddress, this.state.destinationAddress);
-            this.setState(() => ({computedDistance: distanceData[0]}));
-            this.setState(() => ({computedDuration: distanceData[1]}));
-        }
     } 
     //Form submission handler
     onSubmit = (e) =>{
@@ -163,7 +163,6 @@ export default class BookingForm extends React.Component {
                     <h1>{this.state.bookingStep}</h1>
                 </div>
                 <div className="card-body">
-                   <p>{this.state.computedDistance}</p>
                    {this.state.bookingTimeAllowed && !this.state.isSubmit && <div className="alert alert-danger">{this.state.bookingTimeAllowed}</div>}
                 {!this.state.isSubmit &&
                  <form onSubmit={this.onSubmit}>
@@ -241,7 +240,9 @@ export default class BookingForm extends React.Component {
                  {//COMFIRMATION FORM GET DISPLAYED HERE
                  }
                    {this.state.isSubmit && <div>
-                   <p>Hello {this.state.clientName}, your booking details are:</p>
+                   <p>Hello {this.state.clientName}, your booking is progressing well.</p></div>
+                   }
+                   {this.state.isSubmit && <div><p><strong>Booking fare: {this.state.tripPrice.toFixed(2)}</strong></p>
                    <p>To finalize your booking select your payment option below </p>
                    <form onSubmit={this.processConfirm}>
                     <CheckboxOrRadioGroup
@@ -251,7 +252,7 @@ export default class BookingForm extends React.Component {
                         controlFunc={this.handlePaymentOptionSelection}
                         options={this.state.paymentOptions}
                         selectedOptions={this.state.selectedPayment} />
-                    <button> Confirm booking </button>
+                    <button type="submit" className="btn btn-Secondary btn-lg"> Confirm booking </button>
                     </form>
                    </div>
                    }
