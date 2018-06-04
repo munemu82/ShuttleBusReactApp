@@ -1,5 +1,5 @@
 import React from 'react';
-import Geocode from "react-geocode";
+//import Geocode from "react-geocode";
 
 let returnDistanceData=[];
 
@@ -23,7 +23,7 @@ export const getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2)  => {
   };
 
 // set Google Maps Geocoding API for purposes of quota management. Its optional
-Geocode.setApiKey("AIzaSyANoYRAHybdGTkV91xzKgw3xWWkH_tzPYk");
+/* Geocode.setApiKey("AIzaSyANoYRAHybdGTkV91xzKgw3xWWkH_tzPYk");
 
 export const getLatLonFromAddress = (address) => {
   // Get latidude & longitude from address.
@@ -40,7 +40,7 @@ export const getLatLonFromAddress = (address) => {
   );
   return finalResult;
 }
-
+ */
 //Calculate the distance
 function calculateDistance(origin, destination) {
 	var service = new google.maps.DistanceMatrixService();
