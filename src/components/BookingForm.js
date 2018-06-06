@@ -10,6 +10,7 @@ import Request from 'superagent';
 import SelectField from './bookingForm/SelectField';
 import TimePicker from 'react-time-picker';
 import { computeBookingFare, roundNumber } from '../utilities/bookingCalculations';
+import numeral from 'numeral';
 
 export default class BookingForm extends React.Component {
     constructor(props){
@@ -241,7 +242,7 @@ export default class BookingForm extends React.Component {
                    {this.state.isSubmit && <div>
                    <p>Hello {this.state.clientName}, your booking is progressing well.</p></div>
                    }
-                   {this.state.isSubmit && <div><p><strong>Booking fare: {this.state.tripPrice.toFixed(2)}</strong></p>
+                   {this.state.isSubmit && <div><p><strong>Booking fare: {numeral(this.state.tripPrice).format('$0,0.00')}</strong></p>
                    <p>To finalize your booking select your payment option below </p>
                    <form id="bookingFormStep2" onSubmit={this.processConfirm}>
                     <CheckboxOrRadioGroup
