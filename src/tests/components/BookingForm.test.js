@@ -37,3 +37,20 @@ test('Should set client Name on input change', () =>{
     expect(wrapper).toMatchSnapshot();
 });
 
+//Test form submission 
+test('Should call onSubmit prop for valid form submission', () =>{
+    const onSubmitSpy = jest.fn();
+    const wrapper = shallow(<BookingForm booking={bookings[0]} onSubmit={onSubmitSpy} />);
+    wrapper.find('#bookingFormStep1').simulate('submit', {
+        preventDefault : () => {}
+    });
+    expect(wrapper.state('error')).toBe('');
+    expect(onSubmitSpy).toHaveBeenLastCalledWith({
+        clientName: bookings[0].clientName,
+        pickupAddress: bookings[0].pickupAddress,
+        destinationAddress: bookings[0].destinationAddress,
+        pickupDate: bookings[0].pickupDate
+    });
+});
+
+

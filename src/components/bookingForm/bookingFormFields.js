@@ -62,4 +62,18 @@ export const CheckboxOrRadioGroup = (props) => (
 	</div>
 );
 
+export const TextAreaField = (props) => (
+	<div>
+		<label className="form-label">{props.title}</label>
+		<textarea 
+			className="form-control" 
+			name={props.name}
+			rows={props.numOfRows} 
+			value={props.content}
+			onChange={props.controlFunc}
+			placeholder={props.placeholder}
+			>
+		</textarea>
+	</div>
+);
 

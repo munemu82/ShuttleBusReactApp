@@ -1,8 +1,9 @@
 import React from 'react';
+import ContactForm from './ContactForm';
 
 const ContactUsPage = () => (
   <div className="content">
-    This is ContactUsPage
+    <ContactForm />
   </div>
 );
 
