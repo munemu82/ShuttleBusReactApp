@@ -4,7 +4,6 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import { SingleDatePicker } from 'react-dates';
 import AddressInputFieldFunc, { SingleInputField, CheckboxOrRadioGroup } from './bookingForm/bookingFormFields';
 import calculateDistance, {getLatLonFromAddress, getDistanceFromLatLonInKm } from '../geocoding/locationCoding';
-import 'react-dates/lib/css/_datepicker.css';
 import { convertDateToMilliseconds, getDateFromMillisec, isAllowedBooking, getTimeFromDate } from '../utilities/manageDates';
 import Form, { Button, ControlLabel, FormControl} from 'react-bootstrap';
 import Request from 'superagent';
@@ -165,7 +164,7 @@ export default class BookingForm extends React.Component {
                 <div className="card-body">
                    {this.state.bookingTimeAllowed && !this.state.isSubmit && <div className="alert alert-danger">{this.state.bookingTimeAllowed}</div>}
                 {!this.state.isSubmit &&
-                 <form onSubmit={this.onSubmit}>
+                 <form id="bookingFormStep1" onSubmit={this.onSubmit}>
                         <SingleInputField
                             inputType={'text'}
                             title={'Client Name'}
@@ -244,7 +243,7 @@ export default class BookingForm extends React.Component {
                    }
                    {this.state.isSubmit && <div><p><strong>Booking fare: {this.state.tripPrice.toFixed(2)}</strong></p>
                    <p>To finalize your booking select your payment option below </p>
-                   <form onSubmit={this.processConfirm}>
+                   <form id="bookingFormStep2" onSubmit={this.processConfirm}>
                     <CheckboxOrRadioGroup
                         title={'Select Payment option:'}
                         setName={'paymentOption'}

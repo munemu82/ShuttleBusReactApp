@@ -8,6 +8,7 @@ import {setClientNameFilter } from './actions/filters';
 import getVisibleBookings from './selectors/bookings';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
+import 'react-dates/lib/css/_datepicker.css';
 
 //create the store
 const bookingStore = configureStore();

@@ -27,4 +27,5 @@ export default [{
   tripPrice:115,
   status:'Booked',
   createdAt: moment(0).add(4, 'days').valueOf()
-}];
+}
+];
