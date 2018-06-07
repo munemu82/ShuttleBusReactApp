@@ -11,7 +11,7 @@ import numeral from 'numeral';
 const BookingListItem = ({ dispatch, id, clientName, pickupAddress, destinationAddress, pickupDate, tripPrice, createdAt}) => (
     <div>
         <h3>{clientName}</h3>
-        <p>{createdAt}-{pickupAddress}-{destinationAddress}-{moment(pickupDate).format('Do MMMM, YYYY')}-{numeral(tripPrice).format('$0,0.00')} -
+        <p>{moment(createdAt).format('Do MMMM, YYYY')}-{pickupAddress}-{destinationAddress}-{moment(pickupDate).format('Do MMMM, YYYY')}-{numeral(tripPrice).format('$0,0.00')} -
         <Link to={`/booking/edit/${id}`} className="btn btn-primary" >Edit</Link>
          <Button onClick={() => {
              dispatch( removeBooking({ id }));

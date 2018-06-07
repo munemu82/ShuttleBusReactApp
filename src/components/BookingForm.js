@@ -150,6 +150,7 @@ export default class BookingForm extends React.Component {
             clientName: this.state.clientName,
             pickupAddress: this.state.pickupAddress,
             destinationAddress: this.state.destinationAddress,
+            tripPrice: this.state.tripPrice,
             createdAt: moment().valueOf(),
             pickupDate:this.state.pickupDate.valueOf()
         });
