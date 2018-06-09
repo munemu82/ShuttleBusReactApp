@@ -1,6 +1,7 @@
 import React from 'react';
 import Recaptcha from 'react-recaptcha';
 import { SingleInputField, TextAreaField} from './bookingForm/bookingFormFields';
+import { validateEmail } from '../utilities/standaloneFunctions';
 
 // site key
 const sitekey = '6Lfql10UAAAAAKYuFMu-n72sEo9uyAdXq0Gh3uYt';
@@ -74,6 +75,11 @@ export default class ContactForm extends React.Component {
         if(this.state.email===''){
             error.email = 'Email is a required field, please enter your enail';
             this.setState( () => ({error}));
+        }else{
+            if(validateEmail(this.state.email)===false){
+                error.email = 'Email provided is invalid, please provide valid email';
+                this.setState( () => ({error}));
+            }
         }
         if(this.state.enquiry===''){
             error.enquiry = 'Enquiry is a required field, please enter your enquiry';

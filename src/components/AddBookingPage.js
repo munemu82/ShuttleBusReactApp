@@ -1,20 +1,27 @@
 import React from 'react';
 import BookingForm from './BookingForm';
 import { connect } from 'react-redux';
-import { submitBooking } from '../actions/bookings';
+import { startAddBooking } from '../actions/bookings';
 
 
-const AddBookingPage = (props) => (
-  <div className="content">
-    <hr />
-    <BookingForm 
-      onSubmit = { (booking) => {
-        console.log(booking.clientName);
-        props.dispatch(submitBooking(booking));   //submit the booking to the store
-        props.history.push('/dashboard'); //this is to redirect to home page
-      }}
-    />
-  </div>
-);
+export class AddBookingPage extends React.Component {
+  onSubmit = (booking) => {
+    this.props.startAddBooking(booking);
+    this.props.history.push('/dashboard'); 
+  };
+  render(){
+    return (
+      <div className="content">
+        <hr />
+        <BookingForm 
+          onSubmit = {this.onSubmit}
+        />
+      </div>
+    );
+  }
+}
+const mapDispatchToProps = (dispatch) => ({
+  startAddBooking: (booking) => dispatch(startAddBooking(booking))
+});
 
-export default connect()(AddBookingPage);   //this connect to the bookings store and save the booking record
+export default connect(undefined, mapDispatchToProps)(AddBookingPage); //this connect to the bookings store and save the booking record  

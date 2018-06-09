@@ -26,6 +26,7 @@ export default class BookingForm extends React.Component {
             computedDistance: 0, computedDuration: 0,
             isSubmit: false,
             tripPrice: 0,
+            status: 'Initialized',
             bookingData: {clientName: ''},
             bookingTimeAllowed: '', bookingStep: 'New Booking - Creation',
             noOfAdultPassenrsOptions: [],noOfChildrenPassenrsOptions: [],paymentOptions: [],
@@ -102,7 +103,7 @@ export default class BookingForm extends React.Component {
         this.setState({ bookingTime });
     } 
     //Form submission handler
-    onSubmit = (e) =>{
+    processBookingForm = (e) =>{
         e.preventDefault();
         let error = Object.assign({}, this.state.error);
         let bookingData = Object.assign({}, this.state.bookingData);
@@ -142,7 +143,7 @@ export default class BookingForm extends React.Component {
                 
         }
     };
-    processConfirm = (e) =>{
+    onSubmit = (e) =>{
         e.preventDefault();
         console.log(this.state.selectedPayment);
         console.log(this.state.clientName);
@@ -150,9 +151,11 @@ export default class BookingForm extends React.Component {
             clientName: this.state.clientName,
             pickupAddress: this.state.pickupAddress,
             destinationAddress: this.state.destinationAddress,
-            tripPrice: this.state.tripPrice,
-            createdAt: moment().valueOf(),
-            pickupDate:this.state.pickupDate.valueOf()
+            pickupDate:this.state.pickupDate.valueOf(),
+            pickupTime:this.state.bookingTime,
+            tripPrice: numeral(this.state.tripPrice).format('$0,0.00'),
+            status: this.state.status,
+            createdAt: moment().valueOf()
         });
         console.log('Confirmation submitted successfully!')
     }
@@ -166,7 +169,7 @@ export default class BookingForm extends React.Component {
                 <div className="card-body">
                    {this.state.bookingTimeAllowed && !this.state.isSubmit && <div className="alert alert-danger">{this.state.bookingTimeAllowed}</div>}
                 {!this.state.isSubmit &&
-                 <form id="bookingFormStep1" onSubmit={this.onSubmit}>
+                 <form id="bookingFormStep1" onSubmit={this.processBookingForm}>
                         <SingleInputField
                             inputType={'text'}
                             title={'Client Name'}
@@ -245,7 +248,7 @@ export default class BookingForm extends React.Component {
                    }
                    {this.state.isSubmit && <div><p><strong>Booking fare: {numeral(this.state.tripPrice).format('$0,0.00')}</strong></p>
                    <p>To finalize your booking select your payment option below </p>
-                   <form id="bookingFormStep2" onSubmit={this.processConfirm}>
+                   <form id="bookingFormStep2" onSubmit={this.onSubmit}>
                     <CheckboxOrRadioGroup
                         title={'Select Payment option:'}
                         setName={'paymentOption'}

@@ -8,15 +8,12 @@ import moment from 'moment';
 import numeral from 'numeral';
 //Export a stateless functional component 
 
-const BookingListItem = ({ dispatch, id, clientName, pickupAddress, destinationAddress, pickupDate, tripPrice, createdAt}) => (
+const BookingListItem = ({ id, clientName, pickupAddress, destinationAddress, pickupDate, tripPrice, createdAt}) => (
     <div>
-        <h3>{clientName}</h3>
-        <p>{moment(createdAt).format('Do MMMM, YYYY')}-{pickupAddress}-{destinationAddress}-{moment(pickupDate).format('Do MMMM, YYYY')}-{numeral(tripPrice).format('$0,0.00')} -
-        <Link to={`/booking/edit/${id}`} className="btn btn-primary" >Edit</Link>
-         <Button onClick={() => {
-             dispatch( removeBooking({ id }));
-         }}  bsStyle="danger">Remove</Button>
-         </p>
+         <Link to={`/booking/edit/${id}`} >
+             <h2>{clientName}</h2>
+        </Link>
+        <p>{moment(createdAt).format('Do MMMM, YYYY')}-{pickupAddress}-{destinationAddress}-{moment(pickupDate).format('Do MMMM, YYYY')}-{numeral(tripPrice).format('$0,0.00')} </p>
     </div>
 
 );
