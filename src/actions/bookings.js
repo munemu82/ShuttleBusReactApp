@@ -44,3 +44,22 @@ export const removeBooking = ({ id } = {}) => ({
     type: 'REMOVE_BOOKING',
     id
 });
+//SET_BOOKINGS
+export const setBookings = (bookings) =>({
+    type: 'SET_BOOKINGS',
+    bookings
+});
+export const startSetBookings = () => {
+    return (dispatch) =>{
+        return database.ref('bookings').once('value').then( (snapshot) =>{
+            const bookings = [];
+            snapshot.forEach( (childsnapshot) =>{
+                bookings.push({
+                    id: childsnapshot.key,
+                    ...childsnapshot.val()
+                });
+            });
+            dispatch(setBookings(bookings));
+        });
+    }
+}

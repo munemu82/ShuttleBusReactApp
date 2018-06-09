@@ -1,11 +1,20 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { submitBooking, editBooking, removeBooking } from '../../actions/bookings';
+import { submitBooking, editBooking, removeBooking, setBookings, startSetBookings } from '../../actions/bookings';
 import bookings from '../fixtures/bookings';
 import startAddBooking from '../../actions/bookings';
 import database from '../../firebase/firebase';
 
 const createMockStore = configureMockStore(thunk);
+beforeEach((done) =>{
+    const bookingsData = {};
+    bookings.forEach(({id, clientName, pickupAddress, destinationAddress,
+    pickupDate, pickupTime, tripPrice, status, createdAt }) => {
+        bookingsData[id] = {  clientName, pickupAddress, destinationAddress,
+            pickupDate, pickupTime, tripPrice, status, createdAt }
+    });
+    database.ref('bookings').set(bookingsData).then(() => done());
+});
 //Test remove booking action
 test('Should setup remove booking action object', () =>{
     const action = removeBooking({ id: '123abc' });
@@ -89,6 +98,24 @@ test('Should add booking with defaults to the database and store', (done) =>{
  });
 });
 
+test('Should setup set bookings action object with data', () =>{
+    const action = setBookings(bookings);
+    expect(action).toEqual({
+        type: 'SET_BOOKINGS',
+        bookings
+    })
+});
+test('Should fetch the bookings from the database', (done) =>{
+    const store = createMockStore({});
+    store.dispatch(startSetBookings()).then(()=>{
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'SET_BOOKINGS',
+            bookings
+        });
+        done();
+    });
+  });
 /* test('Should setup submission of booking action object with default values', () =>{
     const action = submitBooking();
     expect(action).toEqual({

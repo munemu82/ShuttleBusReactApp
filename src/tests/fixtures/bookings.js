@@ -6,6 +6,7 @@ export default [{
   pickupAddress: '116 Mcburney Rd, Cabramatta',
   destinationAddress: '220 George St, Sydney',
   pickupDate:0,
+  pickupTime:'10:00',
   tripPrice:120,
   status:'Initialized',
   createdAt: 0
@@ -15,6 +16,7 @@ export default [{
   pickupAddress: '116 Mcburney Rd, Cabramatta',
   destinationAddress: 'Paramatta Station',
   pickupDate:-1000,
+  pickupTime:'10:00',
   tripPrice:80,
   status:'Initialized',
   createdAt: moment(0).subtract(4, 'days').valueOf()
@@ -24,6 +26,7 @@ export default [{
   pickupAddress: '85 Mcburney Rd, Cabramatta',
   destinationAddress: 'Sydney Domestic Aiport',
   pickupDate:1000,
+  pickupTime:'10:00',
   tripPrice:115,
   status:'Booked',
   createdAt: moment(0).add(4, 'days').valueOf()

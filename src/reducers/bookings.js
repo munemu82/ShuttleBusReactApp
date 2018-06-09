@@ -21,7 +21,9 @@ const bookingsReducer = (state = bookingsReducerDefaultState, action) =>{
                 }else{      // no updates made to the booking 
                     return booking;
                 }
-            })    
+            }) 
+        case 'SET_BOOKINGS':
+            return action.bookings;
         default:
             return state;
         }      

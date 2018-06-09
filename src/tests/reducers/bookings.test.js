@@ -74,3 +74,12 @@ import bookings from '../fixtures/bookings';
     const state = bookingsReducer(bookings, action);
     expect(state).toEqual(bookings);
   });
+  
+  test('Should set bookings', () =>{
+    const action = {
+      type: 'SET_BOOKINGS',
+      bookings: [bookings[1]]
+    };
+    const state = bookingsReducer(bookings, action);
+    expect(state).toEqual([bookings[1]]);
+  });
