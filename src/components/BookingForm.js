@@ -20,7 +20,7 @@ export default class BookingForm extends React.Component {
             pickupAddress: props.booking ? props.booking.pickupAddress : '',
             destinationAddress: props.booking ? props.booking.destinationAddress : '',
             pickupDate:props.booking ? moment(props.booking.pickupDate) : moment().subtract(1, "days"),
-            createdAt: 0, bookingTime: getTimeFromDate( moment().valueOf()),
+            createdAt: 0, pickupTime:getTimeFromDate( moment().valueOf()),
             calendarFocused: false, 
             error: {clientNameError: '', pickupAddressError:'', destAddressError:'', selectedNoOfPassAdultError: ''},
             computedDistance: 0, computedDuration: 0,
@@ -99,16 +99,21 @@ export default class BookingForm extends React.Component {
         this.setState({ selectedPayment: e.target.value});
         console.log(this.state.selectedPayment);
 	}
-    onTimeChange = bookingTime => {
-        this.setState({ bookingTime });
-    } 
+   /*  onTimeChange = pickupTime => {
+        this.setState({ pickupTime });
+    }  */
+    onTimeChange = (pickupTime) => {
+        if(pickupTime){
+            this.setState(() => ({pickupTime}));
+        }
+    };
     //Form submission handler
     processBookingForm = (e) =>{
         e.preventDefault();
         let error = Object.assign({}, this.state.error);
         let bookingData = Object.assign({}, this.state.bookingData);
-       console.log(isAllowedBooking(this.state.pickupDate, this.state.bookingTime, this.state.noOfHoursBeforePickup));
-       console.log(this.state.bookingTime);
+       console.log(isAllowedBooking(this.state.pickupDate, this.state.pickupTime, this.state.noOfHoursBeforePickup));
+       console.log(this.state.pickupTime);
        if(this.state.clientName===''){
             error.clientNameError = 'Client name is a required field, please enter your details';
             this.setState( () => ({error}));
@@ -128,7 +133,7 @@ export default class BookingForm extends React.Component {
         if(this.state.clientName && this.state.pickupAddress && this.state.destinationAddress 
             && this.state.selectedNoOfAdultsOption){
                 this.setState( () => ({bookingData}));
-                if(isAllowedBooking(this.state.pickupDate, this.state.bookingTime, this.state.noOfHoursBeforePickup)){
+                if(isAllowedBooking(this.state.pickupDate, this.state.pickupTime, this.state.noOfHoursBeforePickup)){
                     this.setState( () => ({error}));  //reset error to empty object
                     this.setState( () => ({isSubmit: true}));
                     //calculate booking trip price
@@ -152,12 +157,13 @@ export default class BookingForm extends React.Component {
             pickupAddress: this.state.pickupAddress,
             destinationAddress: this.state.destinationAddress,
             pickupDate:this.state.pickupDate.valueOf(),
-            pickupTime:this.state.bookingTime,
+            pickupTime:this.state.pickupTime,
             tripPrice: numeral(this.state.tripPrice).format('$0,0.00'),
             status: this.state.status,
             createdAt: moment().valueOf()
         });
         console.log('Confirmation submitted successfully!')
+        console.log(this.props.action);
     }
     render(){
         return (
@@ -212,7 +218,7 @@ export default class BookingForm extends React.Component {
                             <ControlLabel>Pickup Time</ControlLabel>  <br />
                                 <TimePicker
                                     onChange={this.onTimeChange}
-                                    value={this.state.bookingTime}
+                                    value={this.state.pickupTime}
                                     required={true} />
                             </div>
                         </div>

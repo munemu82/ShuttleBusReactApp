@@ -5,6 +5,7 @@ import { startAddBooking } from '../actions/bookings';
 
 
 export class AddBookingPage extends React.Component {
+  action ='Add';
   onSubmit = (booking) => {
     this.props.startAddBooking(booking);
     this.props.history.push('/dashboard'); 
@@ -15,6 +16,7 @@ export class AddBookingPage extends React.Component {
         <hr />
         <BookingForm 
           onSubmit = {this.onSubmit}
+          action = {this.action}
         />
       </div>
     );

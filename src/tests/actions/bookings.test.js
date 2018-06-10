@@ -1,6 +1,14 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { submitBooking, editBooking, removeBooking, setBookings, startSetBookings } from '../../actions/bookings';
+import { 
+    submitBooking, 
+    editBooking, 
+    startEditBooking,
+    removeBooking,
+    startRemoveBooking,
+    setBookings,
+    startSetBookings
+} from '../../actions/bookings';
 import bookings from '../fixtures/bookings';
 import startAddBooking from '../../actions/bookings';
 import database from '../../firebase/firebase';
@@ -13,29 +21,10 @@ beforeEach((done) =>{
         bookingsData[id] = {  clientName, pickupAddress, destinationAddress,
             pickupDate, pickupTime, tripPrice, status, createdAt }
     });
-    database.ref('bookings').set(bookingsData).then(() => done());
-});
-//Test remove booking action
-test('Should setup remove booking action object', () =>{
-    const action = removeBooking({ id: '123abc' });
-    expect(action).toEqual({
-        type: 'REMOVE_BOOKING',
-        id: '123abc'
-    });
+    database.ref('bookings').set(bookingsData).then((done) => done());
 });
 
-//Test edit booking action
-test('Should setup edit booking action object', () =>{
-    const action = editBooking('123abc', { pickupAddress: '26-28 Canley Vale Rd'});
-    expect(action).toEqual({
-        type: 'EDIT_BOOKING',
-        id: '123abc',
-        updates: {
-            pickupAddress: '26-28 Canley Vale Rd'
-        }
-    });
-});
-
+//BEGIN OF TEST CASES
 //Test submit booking action
 test('Should setup submission of booking action object with provided values', () =>{
     const action = submitBooking(bookings[2]);
@@ -66,9 +55,9 @@ test('Should add booking to the database and store', (done) =>{
         });
         return database.ref(`bookings/${actions[0].booking.id}`).once('value');
    }).then((snapshot) =>{
-    expect(snapshot.val()).toEqual(bookingData);
-    done();
-});
+        expect(snapshot.val()).toEqual(bookingData);
+        done();
+    });
 });
 test('Should add booking with defaults to the database and store', (done) =>{
     const store = createMockStore({});
@@ -97,7 +86,60 @@ test('Should add booking with defaults to the database and store', (done) =>{
      done();
  });
 });
+//Test remove booking action
+test('Should setup remove booking action object', () =>{
+    const action = removeBooking({ id: '123abc' });
+    expect(action).toEqual({
+        type: 'REMOVE_BOOKING',
+        id: '123abc'
+    });
+});
+test('Should remove booking from firebase', () =>{
+    const store = createMockStore({});
+    const id = bookings[2].id;
+    store.dispatch(startRemoveBooking({ id })).then( () =>{
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'REMOVE_BOOKING',
+            id
+        });
+        return database.ref(`bookings/${id}`).once('value')
+    }).then( (snapshot) =>{
+        expect(snapshot.val()).toBeFalsy();
+        done();
+    });
+});
 
+//Test edit booking action
+test('Should setup edit booking action object', () =>{
+    const action = editBooking('123abc', { pickupAddress: '26-28 Canley Vale Rd'});
+    expect(action).toEqual({
+        type: 'EDIT_BOOKING',
+        id: '123abc',
+        updates: {
+            pickupAddress: '26-28 Canley Vale Rd'
+        }
+    });
+});
+test('Should edit booking from firebase', (done) =>{
+    const store = createMockStore({});
+    const id = bookings[0].id;
+    const updates = { tripPrice: 125};
+    store.dispatch(startEditBooking(id, updates)).then( () =>{
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'EDIT_BOOKING',
+            id, 
+            updates
+        });
+        return database.ref(`bookings/${id}`).once('value');
+    }).then( (snapshot) =>{
+        expect(snapshot.val().tripPrice).toBe(updates.tripPrice);
+        done();
+    });
+});
+
+//Set and fetch bookings 
 test('Should setup set bookings action object with data', () =>{
     const action = setBookings(bookings);
     expect(action).toEqual({

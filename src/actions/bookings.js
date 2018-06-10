@@ -39,11 +39,25 @@ export const editBooking = (id, updates) => ({
     id,
     updates
 });
+export const startEditBooking = ({ id, updates }) =>{
+    return (dispatch) =>{
+        return database.ref(`bookings/${id}`).update(updates).then( () =>{
+            dispatch(editBooking(id, updates));
+        });
+    }
+}
 //REMOVE_BOOKING
 export const removeBooking = ({ id } = {}) => ({
     type: 'REMOVE_BOOKING',
     id
 });
+export const startRemoveBooking = ({ id } = {}) =>{
+    return (dispatch) =>{
+        return database.ref(`bookings/${id}`).remove().then( () =>{
+            dispatch(removeBooking({ id }));
+        });
+    }
+}
 //SET_BOOKINGS
 export const setBookings = (bookings) =>({
     type: 'SET_BOOKINGS',

@@ -1,25 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import BookingForm from './BookingForm';
-import { editBooking } from '../actions/bookings';
+import { startEditBooking, startRemoveBooking } from '../actions/bookings';
 
-const EditBookingPage = (props) =>{
-    console.log(props);
-    return (
-        <div className="content">
-            <h1>Booking details</h1>
-            <BookingForm 
-                booking = {props.booking}
-                onSubmit = { (booking) => {
-                    //call dispatch action to perform update
-                    props.dispatch(editBooking(props.booking.id, booking));
-                    //redirect back to dashboard page
-                    props.history.push('/dashboard');
-                    //console.log("Updated", booking)
-                }}
-             />
-        </div>
-    );
+export class EditBookingPage extends React.Component{
+    action = 'Edit';
+    onSubmit = (booking) =>{
+        this.props.startEditBooking(this.props.booking.id, booking);
+        this.props.history.push('/dashboard');
+    }
+    onRemove = () => {
+        this.props.startRemoveBooking({ id: this.props.booking.id });
+        this.props.history.push('/dashboard');
+    }
+    render(){
+        return (
+            <div className="content">
+                <h1>Booking details</h1>
+                <BookingForm 
+                    booking = {this.props.booking}
+                    onSubmit = {this.onSubmit}
+                    action = {this.action}
+                 />
+                 <button onClick={this.onRemove}> Remove </button>
+            </div>
+        );
+    }
+    
 };
 
 const mapStateToProps = (state, props) =>{
@@ -27,4 +34,8 @@ const mapStateToProps = (state, props) =>{
         booking: state.bookings.find( (booking) => booking.id === props.match.params.id)
     };
 };
-export default connect(mapStateToProps)(EditBookingPage);
+const mapDispatchToProps = (dispatch, props) => ({
+    startEditBooking: (id, booking) => dispatch(startEditBooking(id, booking)),
+    startRemoveBooking: (data) => dispatch(startRemoveBooking(data))
+});
+export default connect(mapStateToProps, mapDispatchToProps)(EditBookingPage);

@@ -7,7 +7,7 @@ import BookingsSummary from './BookingsSummary';
 const DashboardPage = () => (
   <div className="content">
      <h1>Bookings Dashboard</h1>
-     <BookingsSummary />
+    <BookingsSummary />
     <hr />
     <BookingListFilters />
     <BookingsList />
