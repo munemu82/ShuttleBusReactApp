@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';  
-//import * as bookingsActions from '../actions/bookings';  //import all named exports from bookings
 
+//Setup Database connection configuration
 const config = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -12,7 +12,10 @@ const config = {
 firebase.initializeApp(config);
 const database = firebase.database();
 
-export { firebase, database as default };
+//Setup Authentication provider settings
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+
+export { firebase, googleAuthProvider, database as default };
 /* //Child removed event - trigger everytime a booking is removed
 database.ref('bookings').on('child_removed', (snapshot) =>{
        console.log(snapshot.key, snapshot.val());

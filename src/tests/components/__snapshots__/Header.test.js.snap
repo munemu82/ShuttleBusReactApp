@@ -55,6 +55,23 @@ exports[`should render Header correctly 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="alignRight"
+  >
+    <Link
+      className="btn btn-secondary btn-lg"
+      replace={false}
+      to="/login"
+    >
+      Login
+    </Link>
+    <button
+      className="btn btn-warning btn-lg"
+      onClick={[Function]}
+    >
+       Logout
+    </button>
+  </div>
   <div>
     <ul
       className="headerNav"
@@ -73,7 +90,6 @@ exports[`should render Header correctly 1`] = `
         <NavLink
           activeClassName="is-active"
           ariaCurrent="true"
-          exact={true}
           to="/dashboard"
         >
           Dashboard

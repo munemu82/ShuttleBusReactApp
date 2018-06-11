@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Login Page correctly 1`] = `
+<div
+  className="content"
+>
+  <div
+    className="card"
+  >
+    <div
+      className="card-header"
+    >
+      <h1>
+        Login to access your bookings
+      </h1>
+    </div>
+    <div
+      className="card-body"
+    >
+      <div
+        className="centered"
+      >
+        <button
+          className="btn btn-secondary btn-lg btn-block"
+        >
+           Login 
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

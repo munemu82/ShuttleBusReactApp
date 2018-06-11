@@ -9,3 +9,13 @@
   margin-top: 0;
   padding: 0 $m-size;
 }
+.centered{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+.alignRight{
+  margin-bottom: 2px;
+  //float: right;
+  text-align: right;
+}

@@ -94,7 +94,7 @@ test('Should setup remove booking action object', () =>{
         id: '123abc'
     });
 });
-test('Should remove booking from firebase', () =>{
+test('Should remove booking from firebase', (done) =>{
     const store = createMockStore({});
     const id = bookings[2].id;
     store.dispatch(startRemoveBooking({ id })).then( () =>{

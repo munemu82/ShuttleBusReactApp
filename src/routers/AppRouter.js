@@ -1,6 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom';
+import { Router, Route, Switch, Link, NavLink } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import HomePage from '../components/HomePage';
+import LoginPage from '../components/LoginPage';
 import AddBookingPage from '../components/AddBookingPage';
 import EditBookingPage from '../components/EditBookingPage';
 import AboutUsPage from '../components/AboutUsPage';
@@ -8,16 +10,19 @@ import PartnersPage from '../components/PartnersPage';
 import ContactUsPage from '../components/ContactUsPage';
 import DashboardPage from '../components/DashboardPage';
 import NotFoundPage from '../components/NotFoundPage';
-import Header from '../components/Header';
+import { Header } from '../components/Header';
 import Footer from '../components/Footer';
 
+export const history = createHistory();
+
 const AppRouter = () => (
-  <BrowserRouter>
+  <Router history={history}>
     <div className="container">
       <Header />
       <Switch>
         <Route path="/" component={HomePage} exact={true} />
-        <Route path="/dashboard" component={DashboardPage} exact={true} />
+        <Route path="/login" component={LoginPage}/>
+        <Route path="/dashboard" component={DashboardPage}/>
         <Route path="/booking/edit/:id" component={EditBookingPage} />
         <Route path="/create" component={AddBookingPage} />
         <Route path="/aboutUs" component={AboutUsPage} />
@@ -27,7 +32,7 @@ const AppRouter = () => (
       </Switch>
       <Footer />
     </div>
-  </BrowserRouter>
+  </Router>
 );
 
 export default AppRouter;

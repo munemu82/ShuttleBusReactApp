@@ -1,7 +1,11 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { firebase } from '../firebase/firebase';
+import { startLogout } from '../actions/auth';
 
-const Header = () => (
+//export const Header = ({startLogout}) => (
+export const Header = () => (
   <header>
     <div className="topArea">
     <div className="row">
@@ -20,10 +24,16 @@ const Header = () => (
         </div>
       </div>
     </div>
+    <div className="alignRight">
+        <Link to={'/login'} className="btn btn-secondary btn-lg" >
+            Login
+        </Link>
+      <button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button>
+    </div>
     <div>
       <ul className="headerNav">
        <li><NavLink to="/" activeClassName="is-active" exact={true}>Home</NavLink></li>
-       <li><NavLink to="/dashboard" activeClassName="is-active" exact={true}>Dashboard</NavLink></li>
+       <li><NavLink to="/dashboard" activeClassName="is-active">Dashboard</NavLink></li>
        <li><NavLink to="/create" activeClassName="is-active">Book a Ride</NavLink></li>
        <li><NavLink to="/partners" activeClassName="is-active">Partners</NavLink></li>
        <li><NavLink to="/aboutUs" activeClassName="is-active">About Us</NavLink></li>
@@ -33,4 +43,8 @@ const Header = () => (
  </header>
 );
 
-export default Header;
+const mapDispatchToProps = (dispatch) => ({
+  startLogout: () => dispatch(startLogout())
+});
+
+export default connect(undefined, mapDispatchToProps)(Header);
