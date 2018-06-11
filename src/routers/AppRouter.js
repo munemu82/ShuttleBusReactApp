@@ -12,6 +12,7 @@ import DashboardPage from '../components/DashboardPage';
 import NotFoundPage from '../components/NotFoundPage';
 import { Header } from '../components/Header';
 import Footer from '../components/Footer';
+import PrivateRoute from './PrivateRoute';
 
 export const history = createHistory();
 
@@ -22,9 +23,9 @@ const AppRouter = () => (
       <Switch>
         <Route path="/" component={HomePage} exact={true} />
         <Route path="/login" component={LoginPage}/>
-        <Route path="/dashboard" component={DashboardPage}/>
-        <Route path="/booking/edit/:id" component={EditBookingPage} />
-        <Route path="/create" component={AddBookingPage} />
+        <PrivateRoute path="/dashboard" component={DashboardPage}/>
+        <PrivateRoute path="/booking/edit/:id" component={EditBookingPage} />
+        <PrivateRoute path="/create" component={AddBookingPage} />
         <Route path="/aboutUs" component={AboutUsPage} />
         <Route path="/partners" component={PartnersPage} />
         <Route path="/contactUs" component={ContactUsPage} />
