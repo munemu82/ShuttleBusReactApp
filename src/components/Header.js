@@ -4,6 +4,17 @@ import { connect } from 'react-redux';
 import { firebase } from '../firebase/firebase';
 import { startLogout } from '../actions/auth';
 
+let isAuthenticated = false;
+let authenticatedUserEmail ='';
+
+firebase.auth().onAuthStateChanged((user) => {
+  if(user){
+    isAuthenticated = true;
+    authenticatedUserEmail = user.email;
+  }else{
+    isAuthenticated = false;
+  }
+});
 //export const Header = ({startLogout}) => (
 export const Header = () => (
   <header>
@@ -24,11 +35,13 @@ export const Header = () => (
         </div>
       </div>
     </div>
-    <div className="alignRight">
+      <div className="alignRight">
+      {!isAuthenticated &&
         <Link to={'/login'} className="btn btn-secondary btn-lg" >
             Login
-        </Link>
-      <button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button>
+        </Link> 
+      }
+      {isAuthenticated && <p>Hi {authenticatedUserEmail} <button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button> </p>}
     </div>
     <div>
       <ul className="headerNav">

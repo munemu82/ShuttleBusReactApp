@@ -47,7 +47,7 @@ firebase.auth().onAuthStateChanged((user) => {
         if(history.location.pathname === '/login'){
             history.push('/dashboard');
         }
-        console.log('Is Logged in !');
+        console.log(user.email);
     });
     }else{
         bookingStore.dispatch(logout());
