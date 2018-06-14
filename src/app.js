@@ -40,7 +40,7 @@ ReactDOM.render(<p>Loading....</p>, document.getElementById('app'));
 //Tracking authentication states
 firebase.auth().onAuthStateChanged((user) => {
     //checking if user logged in 
-    if(user){
+    if(user){         //check if user is logged in, if so then get their bookings- later, we will add a check to see if user is admin or driver so that we can get all the bookings
         bookingStore.dispatch(login(user.uid));
         bookingStore.dispatch(startSetBookings()).then( () =>{
         renderApp();

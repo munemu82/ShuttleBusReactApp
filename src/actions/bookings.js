@@ -9,7 +9,8 @@ export const submitBooking = (booking) => ({
 });
 
 export const startAddBooking = (bookingData = {} ) =>{
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const uid = getState().auth.uid;
         //Write the data to firebase
         const {
             clientName ='', 
@@ -23,7 +24,7 @@ export const startAddBooking = (bookingData = {} ) =>{
         } = bookingData;
         const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
 
-       return database.ref('bookings').push(booking).then((ref) =>{
+       return database.ref(`users/${uid}/bookings`).push(booking).then((ref) =>{
             dispatch(submitBooking({
                 id: ref.key,
                 ...booking
@@ -40,8 +41,9 @@ export const editBooking = (id, updates) => ({
     updates
 });
 export const startEditBooking = ({ id, updates }) =>{
-    return (dispatch) =>{
-        return database.ref(`bookings/${id}`).update(updates).then( () =>{
+    return (dispatch, getState) =>{
+        const uid = getState().auth.uid;
+        return database.ref(`users/${uid}/bookings/${id}`).update(updates).then( () =>{
             dispatch(editBooking(id, updates));
         });
     }
@@ -52,8 +54,9 @@ export const removeBooking = ({ id } = {}) => ({
     id
 });
 export const startRemoveBooking = ({ id } = {}) =>{
-    return (dispatch) =>{
-        return database.ref(`bookings/${id}`).remove().then( () =>{
+    return (dispatch, getState) =>{
+        const uid = getState().auth.uid;
+        return database.ref(`users/${uid}/bookings/${id}`).remove().then( () =>{
             dispatch(removeBooking({ id }));
         });
     }
@@ -64,8 +67,9 @@ export const setBookings = (bookings) =>({
     bookings
 });
 export const startSetBookings = () => {
-    return (dispatch) =>{
-        return database.ref('bookings').once('value').then( (snapshot) =>{
+    return (dispatch, getState) =>{
+        const uid = getState().auth.uid;
+        return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
             const bookings = [];
             snapshot.forEach( (childsnapshot) =>{
                 bookings.push({
