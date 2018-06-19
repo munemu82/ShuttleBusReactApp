@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import database from '../firebase/firebase';
+import axios from 'axios';
 
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
@@ -20,16 +21,32 @@ export const startAddBooking = (bookingData = {} ) =>{
             pickupTime='0:00',
             tripPrice=0, 
             status='Initialized',
-            createdAt=0 
+            createdAt=0,
+            selectedNoOfAdultsOption=0
         } = bookingData;
-        const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
-
-       return database.ref(`users/${uid}/bookings`).push(booking).then((ref) =>{
+      // const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
+       // const bookingInJSON = JSON.stringify(booking);
+        return axios.post('/api/bookings/', {
+            clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption
+        }).then(res => {
+        /*     res.headers(
+                "Access-Control-Allow-Origin", "*",
+                "Access-Control-Allow-Credentials", "true",
+                "Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT",
+                "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"    
+            ) */
+            //console.log(res.data.createdBooking);
+            dispatch(submitBooking({
+                id: res.data.createdBooking.id,
+                ...res.data.createdBooking
+            }));
+        });
+     /*   return database.ref(`users/${uid}/bookings`).push(booking).then((ref) =>{
             dispatch(submitBooking({
                 id: ref.key,
                 ...booking
             }));
-        });
+        }); */
     };
 };
 
@@ -56,9 +73,12 @@ export const removeBooking = ({ id } = {}) => ({
 export const startRemoveBooking = ({ id } = {}) =>{
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return database.ref(`users/${uid}/bookings/${id}`).remove().then( () =>{
+        /* return database.ref(`users/${uid}/bookings/${id}`).remove().then( () =>{
             dispatch(removeBooking({ id }));
-        });
+        }); */
+        return axios.delete('/api/bookings/'+id).then( () =>{
+            dispatch(removeBooking({ id }));
+        }); 
     }
 }
 //SET_BOOKINGS
@@ -69,15 +89,21 @@ export const setBookings = (bookings) =>({
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
+        return axios.get('http://localhost:3000/api/bookings/').then( res => {
+            const bookings = res.data.bookings;
+            console.log(res.data.bookings);
+            dispatch(setBookings(bookings));
+        });
+        /* return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
             const bookings = [];
             snapshot.forEach( (childsnapshot) =>{
                 bookings.push({
                     id: childsnapshot.key,
                     ...childsnapshot.val()
                 });
-            });
+            }); 
+            console.log(bookings);
             dispatch(setBookings(bookings));
-        });
+       }); */
     }
 }

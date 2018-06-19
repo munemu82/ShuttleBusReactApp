@@ -47,6 +47,7 @@ firebase.auth().onAuthStateChanged((user) => {
         if(history.location.pathname === '/login'){
             history.push('/dashboard');
         }
+        console.log(user);
         console.log(user.email);
     });
     }else{

@@ -37,7 +37,8 @@ export default class BookingForm extends React.Component {
         this.handlePaymentOptionSelection = this.handlePaymentOptionSelection.bind(this);
     }
     componentDidMount() {
-		fetch('./form_config.json')
+        //fetch('./form_config.json')
+        fetch('http://localhost:8080/form_config.json')
 			.then(res => res.json())
 			.then(data => {
 				this.setState({
@@ -110,6 +111,8 @@ export default class BookingForm extends React.Component {
     //Form submission handler
     processBookingForm = (e) =>{
         e.preventDefault();
+        console.log(this.props.action);
+        //console.log(this.props.noOfAdultPassenrsOptions);
         let error = Object.assign({}, this.state.error);
         let bookingData = Object.assign({}, this.state.bookingData);
        console.log(isAllowedBooking(this.state.pickupDate, this.state.pickupTime, this.state.noOfHoursBeforePickup));
@@ -126,7 +129,7 @@ export default class BookingForm extends React.Component {
             error.destAddressError = 'Destination address is a required field, please enter your details';
             this.setState( () => ({error}));
         }
-        if(this.state.selectedNoOfAdultsOption===''){
+        if(this.state.selectedNoOfAdultsOption==='' && this.props.action==='Add' ){
             error.selectedNoOfPassAdultError = 'You must select at least 1 from the options list';
             this.setState( () => ({error}));
         }
@@ -158,12 +161,14 @@ export default class BookingForm extends React.Component {
             destinationAddress: this.state.destinationAddress,
             pickupDate:this.state.pickupDate.valueOf(),
             pickupTime:this.state.pickupTime,
-            tripPrice: numeral(this.state.tripPrice).format('$0,0.00'),
+           // tripPrice: numeral(this.state.tripPrice).format('$0,0.00'),
+            tripPrice: this.state.tripPrice,
             status: this.state.status,
-            createdAt: moment().valueOf()
+            createdAt: moment().valueOf(),
+            selectedNoOfAdultsOption: this.state.selectedNoOfAdultsOption
         });
         console.log('Confirmation submitted successfully!')
-        console.log(this.props.action);
+        console.log(this.state.selectedNoOfAdultsOption);
     }
     render(){
         return (
