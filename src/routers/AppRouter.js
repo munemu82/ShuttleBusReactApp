@@ -11,6 +11,7 @@ import ContactUsPage from '../components/ContactUsPage';
 import DashboardPage from '../components/DashboardPage';
 import NotFoundPage from '../components/NotFoundPage';
 import { Header } from '../components/Header';
+import DriverSignupPage from '../components/DriverSignupPage';
 import Footer from '../components/Footer';
 import PrivateRoute from './PrivateRoute';
 
@@ -26,6 +27,7 @@ const AppRouter = () => (
         <PrivateRoute path="/dashboard" component={DashboardPage}/>
         <PrivateRoute path="/booking/edit/:id" component={EditBookingPage} />
         <PrivateRoute path="/create" component={AddBookingPage} />
+        <PrivateRoute path="/driversignup" component={DriverSignupPage} />
         <Route path="/aboutUs" component={AboutUsPage} />
         <Route path="/partners" component={PartnersPage} />
         <Route path="/contactUs" component={ContactUsPage} />

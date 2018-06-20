@@ -2,6 +2,8 @@ import uuid from 'uuid';
 import database from '../firebase/firebase';
 import axios from 'axios';
 
+//Setup url
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
 export const submitBooking = (booking) => ({ 
@@ -26,7 +28,7 @@ export const startAddBooking = (bookingData = {} ) =>{
         } = bookingData;
       // const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
        // const bookingInJSON = JSON.stringify(booking);
-        return axios.post('/api/bookings/', {
+        return axios.post(`${ROOT_URL}/bookings/`, {
             clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption
         }).then(res => {
         /*     res.headers(
@@ -89,7 +91,7 @@ export const setBookings = (bookings) =>({
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return axios.get('http://localhost:3000/api/bookings/').then( res => {
+        return axios.get(`${ROOT_URL}/bookings/`).then( res => {
             const bookings = res.data.bookings;
             console.log(res.data.bookings);
             dispatch(setBookings(bookings));

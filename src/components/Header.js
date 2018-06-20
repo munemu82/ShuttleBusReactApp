@@ -41,7 +41,9 @@ export const Header = () => (
             Login
         </Link> 
       }
-      {isAuthenticated && <p>Hi {authenticatedUserEmail} <button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button> </p>}
+      {isAuthenticated && <p>Hi {authenticatedUserEmail}  <Link to={'/driversignup'} className="btn btn-primary btn-lg" >
+        Driver Signup
+        </Link><button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button> </p>}
     </div>
     <div>
       <ul className="headerNav">
