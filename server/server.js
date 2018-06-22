@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 //userdefined imports
 const bookingRoutes = require('./api/routes/bookings');
 const driverRoutes = require('./api/routes/drivers');
@@ -19,6 +20,7 @@ mongoose.connect('mongodb://amos:82Maniraki@ds159100.mlab.com:59100/westxshuttle
     useMongoClient: true
 }
 );
+
 //setup logging
 app.use(morgan('dev'));
 //setup body parser
@@ -61,7 +63,6 @@ app.use(express.static(publicPath));   //setup middleware to the application
 app.get('*', (req, res) =>{
     res.sendFile(path.join(publicPath, 'index.html'));
 });
-
 //RUN SERVER 
 //const server = http.createServer(app);
 app.listen(port, () => {
