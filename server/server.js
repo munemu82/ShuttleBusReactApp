@@ -1,71 +1,69 @@
-//IMPORTS
-const path = require('path');
-const http = require('http');
 const express = require('express');
-const publicPath = path.join(__dirname,'..','public');
-const port = process.env.PORT || 3000;
-const morgan = require('morgan');
-const bodyparser = require('body-parser');
+const fs = require('fs');
+const historyApiFallback = require('connect-history-api-fallback');
 const mongoose = require('mongoose');
+const path = require('path');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+
+const config = require('../config/config');
+const webpackConfig = require('../webpack.config');
+
+const isDev = process.env.NODE_ENV !== 'production';
+const port  = process.env.PORT || 8080;
 
 
-//userdefined imports
-const bookingRoutes = require('./api/routes/bookings');
-const driverRoutes = require('./api/routes/drivers');
+// Configuration
+// ================================================================================================
 
-//INITIALIZATIONS
+// Set up Mongoose
+mongoose.connect(isDev ? config.db_dev : config.db);
+mongoose.Promise = global.Promise;
+
 const app = express();
-mongoose.connect('mongodb://amos:82Maniraki@ds159100.mlab.com:59100/westxshuttlebus',
-{
-    useMongoClient: true
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// API routes
+require('./routes')(app);
+
+if (isDev) {
+  const compiler = webpack(webpackConfig);
+
+  app.use(historyApiFallback({
+    verbose: false
+  }));
+
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    contentBase: path.resolve(__dirname, '../client/public'),
+    stats: {
+      colors: true,
+      hash: false,
+      timings: true,
+      chunks: false,
+      chunkModules: false,
+      modules: false
+    }
+  }));
+
+  app.use(webpackHotMiddleware(compiler));
+  app.use(express.static(path.resolve(__dirname, '../dist')));
+} else {
+  app.use(express.static(path.resolve(__dirname, '../dist')));
+  app.get('*', function (req, res) {
+    res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+    res.end();
+  });
 }
-);
 
-//setup logging
-app.use(morgan('dev'));
-//setup body parser
-app.use(bodyparser.urlencoded({extended: false}));
-app.use(bodyparser.json());
+app.listen(port, '0.0.0.0', (err) => {
+  if (err) {
+    console.log(err);
+  }
 
-//SETUP SERVER SIDE  ROUTING
-app.use((req, res, next) =>{
-    res.header("Access-Control-Allow-Origin", "*");  //giving access to all clients
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
-    res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-      
-    next();
+  console.info('>>> 🌎 Open http://0.0.0.0:%s/ in your browser.', port);
 });
 
-//ROUTES WHICH HANDLE REQUESTS 
-//Calling for GET request to /bookings route
-app.use('/api/bookings', bookingRoutes);
-
-//Calling for GET request to /drivers route
-app.use('/api/drivers', driverRoutes);
-
-//ERROR HANDLING
-app.use((req, res, next) =>{
-    const error = new Error('Not found');
-    error.status(404);
-    next(error);
-});
-app.use((error, req, res, next) =>{
-    res.status(error.status || 500);
-    res.json({  
-        error: {
-            message: error.message
-        }
-    });
-});
-//SETUP CLIENT SIDE  ROUTING
-app.use(express.static(publicPath));   //setup middleware to the application
-app.get('*', (req, res) =>{
-    res.sendFile(path.join(publicPath, 'index.html'));
-});
-//RUN SERVER 
-//const server = http.createServer(app);
-app.listen(port, () => {
-    console.log('Server is up and running on port: ',port);
-    //console.log(port);
-})
+module.exports = app;

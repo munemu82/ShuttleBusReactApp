@@ -1,0 +1,11 @@
+{
+  "brandName": "",
+  "noOfAdultPassenrsOptions": ["1", "2", "3","4","5"],
+  "noOfChildrenPassenrsOptions": ["1", "2", "3","4","5"],
+  "returnTrip": ["yes", "no"],
+  "paymentOptions": ["PayPal", "Pickup Cash"],
+  "baseBookingFare":"2.5",
+  "farePerMinute":"0.4",
+  "farePerKm":"1.45",
+  "noOfHoursBeforePickup": "2"
+}
