@@ -1,12 +1,8 @@
 {
-  "name": "WestX_ShuttleBus_App",
+  "name": "shuttlebusreactapp",
   "version": "1.0.0",
   "description": "WestX ShuttleBus App",
   "author": "Amos Munezero",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/munemu82/ShuttleBusReactApp"
-  },
   "license": "MIT",
   "private": true,
   "scripts": {
