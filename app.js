@@ -60,6 +60,14 @@ app.use('/bookings', bookingRoutes);
 //Calling for GET request to /drivers route
 app.use('/drivers', driverRoutes);
 
+app.get('/test', (req, res) =>{
+    res.sendFile(path.join(publicPath, 'test.html'));
+});
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) =>{
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
 //ERROR HANDLING
 app.use((req, res, next) =>{
     const error = new Error('Not found');
@@ -73,14 +81,6 @@ app.use((error, req, res, next) =>{
             message: error.message
         }
     });
-});
-app.get('/test', (req, res) =>{
-    res.sendFile(path.join(publicPath, 'test.html'));
-});
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) =>{
-    res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 module.exports = app;
