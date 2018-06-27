@@ -7,5 +7,6 @@ client/public/dist/styles.css.map
 client/.env.test
 client/.env.development
 client/yarn.lock
+yarn.lock
 
 
