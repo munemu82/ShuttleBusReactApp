@@ -8,5 +8,6 @@ client/.env.test
 client/.env.development
 client/yarn.lock
 yarn.lock
+yarn-error.log
 
 
