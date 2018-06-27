@@ -65,6 +65,7 @@ app.get('/test', (req, res) =>{
 });
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
+app.use(express.static(publicPath));
 app.get('*', (req, res) =>{
     res.sendFile(path.join(publicPath, 'index.html'));
 });
