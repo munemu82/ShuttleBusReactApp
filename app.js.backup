@@ -6,8 +6,6 @@ const mongoose = require('mongoose');
 
 const bookingRoutes = require('./api/routes/bookings');
 const driverRoutes = require('./api/routes/drivers');
-const path = require('path');
-const publicPath = path.join(__dirname,'client/public');
 
 //Setup MongoDB connection (to the cloud of Mongo Altas)
 /* mongoose.connect('mongodb+srv://amos:'+process.env.MONGO_ATLAS_PW+'@shuttlebusnodeapp-dxsxb.mongodb.net/test?retryWrites=false',
@@ -75,10 +73,5 @@ app.use((error, req, res, next) =>{
     });
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) =>{
-    res.sendFile(path.join(publicPath, 'index.html'));
-});
 
 module.exports = app;
