@@ -18,6 +18,10 @@
   ],
   "author": "Amos Munezero",
   "license": "ISC",
+  "engines": {
+    "node": "8.9.4",
+    "npm":  "6.1.0"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.0",
