@@ -93,7 +93,9 @@ export const startSetBookings = () => {
         const uid = getState().auth.uid;
         return axios.get(`${ROOT_URL}/bookings/`).then( res => {
             const bookings = res.data.bookings;
-            console.log(res.data.bookings);
+          //  if(bookings.length > 0){
+             //   console.log(res.data.bookings);
+           // }
             dispatch(setBookings(bookings));
         });
         /* return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
