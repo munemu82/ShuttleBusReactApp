@@ -14,7 +14,8 @@
   "keywords": [
     "node",
     "restful",
-    "api"
+    "api",
+    "express"
   ],
   "author": "Amos Munezero",
   "license": "ISC",
