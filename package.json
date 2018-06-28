@@ -17,7 +17,7 @@
     "express"
   ],
   "author": "Amos Munezero",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": "8.9.4",
     "npm":  "6.1.0"
