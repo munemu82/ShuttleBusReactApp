@@ -43,12 +43,6 @@ export const startAddBooking = (bookingData = {} ) =>{
                 ...res.data.createdBooking
             }));
         });
-     /*   return database.ref(`users/${uid}/bookings`).push(booking).then((ref) =>{
-            dispatch(submitBooking({
-                id: ref.key,
-                ...booking
-            }));
-        }); */
     };
 };
 
@@ -96,16 +90,5 @@ export const startSetBookings = () => {
             console.log(res.data.bookings);
             dispatch(setBookings(bookings));
         });
-        /* return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
-            const bookings = [];
-            snapshot.forEach( (childsnapshot) =>{
-                bookings.push({
-                    id: childsnapshot.key,
-                    ...childsnapshot.val()
-                });
-            }); 
-            console.log(bookings);
-            dispatch(setBookings(bookings));
-       }); */
     }
 }
