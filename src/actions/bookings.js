@@ -89,15 +89,15 @@ export const startSetBookings = () => {
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
             const tempBookings = res.data.bookings;
             
-            fetch('https://westx-shuttlebus.herokuapp.com/api/bookings')
+            /* fetch('https://westx-shuttlebus.herokuapp.com/api/bookings')
             .then(res => res.json())
             .then(data => {
                 bookings = data.bookings;
                 //console.log(data);
             });
+            console.log(bookings); */
             console.log(tempBookings);
-            console.log(bookings);
-            dispatch(setBookings(bookings));
+            dispatch(setBookings(tempBookings));
         },
         (error) => { console.log(error) }
      );
