@@ -2,7 +2,7 @@
   "name": "shuttlebusreactapp",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Andrew Mead",
+  "author": "Amos Munezero",
   "license": "MIT",
   "scripts": {
     "build:dev": "webpack",

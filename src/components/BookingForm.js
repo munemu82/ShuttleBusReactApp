@@ -12,6 +12,7 @@ import TimePicker from 'react-time-picker';
 import { computeBookingFare, roundNumber } from '../utilities/bookingCalculations';
 import numeral from 'numeral';
 
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/';
 export default class BookingForm extends React.Component {
     constructor(props){
         super(props);
@@ -38,7 +39,7 @@ export default class BookingForm extends React.Component {
     }
     componentDidMount() {
         //fetch('./form_config.json')
-        fetch('http://localhost:8080/form_config.json')
+        fetch(`${ROOT_URL}/form_config.json`)
 			.then(res => res.json())
 			.then(data => {
 				this.setState({

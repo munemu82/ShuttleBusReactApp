@@ -28,7 +28,7 @@ export const startAddBooking = (bookingData = {} ) =>{
         } = bookingData;
       // const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
        // const bookingInJSON = JSON.stringify(booking);
-        return axios.post(`${ROOT_URL}/bookings/`, {
+        return axios.post(`${ROOT_URL}/api/bookings/`, {
             clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption
         }).then(res => {
         /*     res.headers(
@@ -62,7 +62,7 @@ export const editBooking = (id, updates) => ({
 export const startEditBooking = ({ id, updates }) =>{
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return database.ref(`users/${uid}/bookings/${id}`).update(updates).then( () =>{
+        return database.ref(`${ROOT_URL}/api/bookings/${id}`).update(updates).then( () =>{
             dispatch(editBooking(id, updates));
         });
     }
@@ -78,7 +78,7 @@ export const startRemoveBooking = ({ id } = {}) =>{
         /* return database.ref(`users/${uid}/bookings/${id}`).remove().then( () =>{
             dispatch(removeBooking({ id }));
         }); */
-        return axios.delete('/api/bookings/'+id).then( () =>{
+        return axios.delete(`${ROOT_URL}/api/bookings/${id}`).then( () =>{
             dispatch(removeBooking({ id }));
         }); 
     }
@@ -91,7 +91,7 @@ export const setBookings = (bookings) =>({
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return axios.get(`${ROOT_URL}/bookings/`).then( res => {
+        return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
             const bookings = res.data.bookings;
             console.log(res.data.bookings);
             dispatch(setBookings(bookings));
