@@ -86,9 +86,30 @@ export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
-            const bookings = res.data.bookings;
-            console.log(res.data.bookings);
-            dispatch(setBookings(bookings));
+            //const bookings = res.data.bookings;
+            const tempBookings = [
+                {clientName: "user1",
+                 pickupAddress: "11 sample address",
+                 destinationAddress: "Sydney airport",
+                 pickupDate: "01/07/2018",
+                 pickupTime: "15:30",
+                 tripPrice: 85,
+                 createdAt: "01/07/2018",
+                 selectedNoOfAdultsOption: "1"
+                },
+                {clientName: "user2",
+                pickupAddress: "15 sample address",
+                destinationAddress: "Sydney airport",
+                pickupDate: "02/07/2018",
+                pickupTime: "15:30",
+                tripPrice: 85,
+                createdAt: "02/07/2018",
+                selectedNoOfAdultsOption: "2"
+               }
+            ];
+
+            //console.log(res.data.bookings);
+            dispatch(setBookings(tempBookings));
         });
     }
 }
