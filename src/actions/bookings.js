@@ -3,7 +3,7 @@ import database from '../firebase/firebase';
 import axios from 'axios';
 
 //Setup url
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'westx-shuttlebus.herokuapp.com';
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
 export const submitBooking = (booking) => ({ 
