@@ -1,9 +1,0 @@
-node_modules/
-client/node_modules/
-client/.env.test
-client/.env.development
-client/yarn.lock
-yarn.lock
-yarn-error.log
-BackupOf.gitignore
-app.js.backup
