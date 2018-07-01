@@ -3,7 +3,7 @@ import database from '../firebase/firebase';
 import axios from 'axios';
 
 //Setup url
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/api';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/';
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
 export const submitBooking = (booking) => ({ 
@@ -86,7 +86,7 @@ export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
-            //const bookings = res.data.bookings;
+            const bookings = res.data.bookings;
             const tempBookings = [
                 {clientName: "user1",
                  pickupAddress: "11 sample address",
@@ -108,7 +108,7 @@ export const startSetBookings = () => {
                }
             ];
 
-            //console.log(res.data.bookings);
+            console.log(bookings);
             dispatch(setBookings(tempBookings));
         });
     }
