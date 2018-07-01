@@ -3,7 +3,7 @@ import database from '../firebase/firebase';
 import axios from 'axios';
 
 //Setup url
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'westx-shuttlebus.herokuapp.com';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'https://westx-shuttlebus.herokuapp.com';
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
 export const submitBooking = (booking) => ({ 
@@ -87,34 +87,17 @@ export const startSetBookings = () => {
         const uid = getState().auth.uid;
         let bookings = [];
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
-            bookings = res.data.bookings;
-            const tempBookings = [
-                {clientName: "user1",
-                 pickupAddress: "11 sample address",
-                 destinationAddress: "Sydney airport",
-                 pickupDate: "01/07/2018",
-                 pickupTime: "15:30",
-                 tripPrice: 85,
-                 createdAt: "01/07/2018",
-                 selectedNoOfAdultsOption: "1"
-                },
-                {clientName: "user2",
-                pickupAddress: "15 sample address",
-                destinationAddress: "Sydney airport",
-                pickupDate: "02/07/2018",
-                pickupTime: "15:30",
-                tripPrice: 85,
-                createdAt: "02/07/2018",
-                selectedNoOfAdultsOption: "2"
-               }
-            ];
+            const tempBookings = res.data.bookings;
+            
             fetch('https://westx-shuttlebus.herokuapp.com/api/bookings')
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                bookings = data.bookings;
+                //console.log(data);
             });
+            console.log(tempBookings);
             console.log(bookings);
-            dispatch(setBookings(tempBookings));
+            dispatch(setBookings(bookings));
         },
         (error) => { console.log(error) }
      );
