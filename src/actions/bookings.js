@@ -108,7 +108,11 @@ export const startSetBookings = () => {
                 selectedNoOfAdultsOption: "2"
                }
             ];
-
+            fetch('https://westx-shuttlebus.herokuapp.com/api/bookings')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            });
             console.log(bookings);
             dispatch(setBookings(tempBookings));
         },
