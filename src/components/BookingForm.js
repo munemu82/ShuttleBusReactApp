@@ -12,7 +12,7 @@ import TimePicker from 'react-time-picker';
 import { computeBookingFare, roundNumber } from '../utilities/bookingCalculations';
 import numeral from 'numeral';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'https://westx-shuttlebus.herokuapp.com';
 export default class BookingForm extends React.Component {
     constructor(props){
         super(props);
