@@ -3,7 +3,7 @@ import database from '../firebase/firebase';
 import axios from 'axios';
 
 //Setup url
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : '/api';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'https://westx-shuttlebus.herokuapp.com';
 //STATES FUNCTION GENERATORS
 //SUBMIT_BOOKING
 export const submitBooking = (booking) => ({ 
@@ -28,7 +28,7 @@ export const startAddBooking = (bookingData = {} ) =>{
         } = bookingData;
       // const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
        // const bookingInJSON = JSON.stringify(booking);
-        return axios.post(`${ROOT_URL}/bookings/`, {
+        return axios.post(`${ROOT_URL}/api/bookings/`, {
             clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption
         }).then(res => {
         /*     res.headers(
@@ -43,12 +43,6 @@ export const startAddBooking = (bookingData = {} ) =>{
                 ...res.data.createdBooking
             }));
         });
-     /*   return database.ref(`users/${uid}/bookings`).push(booking).then((ref) =>{
-            dispatch(submitBooking({
-                id: ref.key,
-                ...booking
-            }));
-        }); */
     };
 };
 
@@ -62,7 +56,7 @@ export const editBooking = (id, updates) => ({
 export const startEditBooking = ({ id, updates }) =>{
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return database.ref(`users/${uid}/bookings/${id}`).update(updates).then( () =>{
+        return database.ref(`${ROOT_URL}/api/bookings/${id}`).update(updates).then( () =>{
             dispatch(editBooking(id, updates));
         });
     }
@@ -78,7 +72,7 @@ export const startRemoveBooking = ({ id } = {}) =>{
         /* return database.ref(`users/${uid}/bookings/${id}`).remove().then( () =>{
             dispatch(removeBooking({ id }));
         }); */
-        return axios.delete('/api/bookings/'+id).then( () =>{
+        return axios.delete(`${ROOT_URL}/api/bookings/${id}`).then( () =>{
             dispatch(removeBooking({ id }));
         }); 
     }
@@ -91,21 +85,21 @@ export const setBookings = (bookings) =>({
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
-        return axios.get(`${ROOT_URL}/bookings/`).then( res => {
-            const bookings = res.data.bookings;
-            console.log(res.data.bookings);
-            dispatch(setBookings(bookings));
-        });
-        /* return database.ref(`users/${uid}/bookings`).once('value').then( (snapshot) =>{
-            const bookings = [];
-            snapshot.forEach( (childsnapshot) =>{
-                bookings.push({
-                    id: childsnapshot.key,
-                    ...childsnapshot.val()
-                });
-            }); 
-            console.log(bookings);
-            dispatch(setBookings(bookings));
-       }); */
+        let bookings = [];
+        return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
+            const tempBookings = res.data.bookings;
+            
+            /* fetch('https://westx-shuttlebus.herokuapp.com/api/bookings')
+            .then(res => res.json())
+            .then(data => {
+                bookings = data.bookings;
+                //console.log(data);
+            });
+            console.log(bookings); */
+            console.log(tempBookings);
+            dispatch(setBookings(tempBookings));
+        },
+        (error) => { console.log(error) }
+     );
     }
 }

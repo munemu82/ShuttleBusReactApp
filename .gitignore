@@ -1,12 +1,10 @@
 node_modules/
-client/node_modules/
-client/public/dist/bundle.js
-client/public/dist/bundle.js.map
-client/public/dist/styles.css
-client/public/dist/styles.css.map
-client/.env.test
-client/.env.development
-client/yarn.lock
+public/dist/bundle.js
+public/dist/bundle.js.map
+public/dist/styles.css
+public/dist/styles.css.map
+.env.test
+.env.development
 yarn.lock
 yarn-error.log
 
