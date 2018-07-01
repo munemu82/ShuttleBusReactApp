@@ -85,8 +85,9 @@ export const setBookings = (bookings) =>({
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
         const uid = getState().auth.uid;
+        let bookings = [];
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
-            const bookings = res.data.bookings;
+            bookings = res.data.bookings;
             const tempBookings = [
                 {clientName: "user1",
                  pickupAddress: "11 sample address",
@@ -110,6 +111,8 @@ export const startSetBookings = () => {
 
             console.log(bookings);
             dispatch(setBookings(tempBookings));
-        });
+        },
+        (error) => { console.log(error) }
+     );
     }
 }
