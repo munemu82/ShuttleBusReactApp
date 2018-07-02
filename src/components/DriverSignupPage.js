@@ -1,10 +1,20 @@
 import React from 'react';
 import DriverSignupForm from './DriverSignupForm';
 
-const DriverSignupPage = () => (
-  <div className="content">
-    <DriverSignupForm />
-  </div>
-);
+export default class DriverSignupPage extends React.Component { 
 
-export default DriverSignupPage;
+onSubmit = (driver) => {
+  //this.props.startAddBooking(booking);
+  this.props.history.push('/dashboard'); 
+};
+render(){
+  return (
+    <div className="content">
+      <hr />
+      <DriverSignupForm 
+        onSubmit = {this.onSubmit}
+      />
+    </div>
+  );
+}
+}

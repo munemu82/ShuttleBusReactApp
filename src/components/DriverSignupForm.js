@@ -44,8 +44,14 @@ export default class DriverSignupForm extends React.Component {
         }
         if(this.state.name && this.state.phonenumber){
             //if name and phone number have been specified correctly
+            console.log(this.state.name);
+            console.log(this.state.phonenumber);
+            console.log(this.state.authenticatedUserEmail);
+            this.props.onSubmit({ 
+            });
+
         }
-        console.log(this.state.authenticatedUserEmail);
+        
     }
     render(){
         return (

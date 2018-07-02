@@ -1,4 +1,7 @@
 import { firebase, googleAuthProvider } from '../firebase/firebase';
+//Setup url
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000' : 'https://westx-shuttlebus.herokuapp.com';
+
 
 export const login = (uid) =>({
     type: 'LOGIN',
@@ -23,3 +26,9 @@ export const startLogout = () => {
     return firebase.auth().signOut();
     console.log('Logout button clicked');
 };
+
+//SIGNUP_DRIVER
+export const submitBooking = (driver) => ({ 
+    type: 'SIGNUP_DRIVER',
+    driver
+});
