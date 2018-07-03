@@ -6,6 +6,7 @@ const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 //Import internal modules
 const bookingRoutes = require('./routes/bookings');
+const driverRoutes = require('./routes/drivers');
 
 //Setup MongoDB connection
 mongoose.connect('mongodb://amos:82Maniraki@ds159100.mlab.com:59100/westxshuttlebus',
@@ -23,6 +24,7 @@ const publicPath = path.join(__dirname, '..', 'public');
 
 //Server side API routes
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/drivers', driverRoutes);
 
 //client side routes
 app.use(express.static(publicPath));
