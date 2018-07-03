@@ -35,14 +35,14 @@ router.get('/', (req, res, next) => {
 
 //REST API to POST request drivers
 router.post('/', (req, res, next) => {
-    //Create booking object 
+    //Create driver object 
     const driver = new Driver({
         _id : mongoose.Types.ObjectId(),
         driverName: req.body.driverName,
         driverEmail: req.body.driverEmail,
         driverPhoneNumber: req.body.driverPhoneNumber
     });
-    //save booking to the MongoDB Database
+    //save driver to the MongoDB Database
     driver.save().then(result =>{
         console.log(result)
         res.status(200).json({
@@ -68,17 +68,64 @@ router.post('/', (req, res, next) => {
 
 //REST API to GET request driver by id
 router.get('/:driverId', (req, res, next) => {
-        res.status(200).json({
-            message: 'Driver details!',
-            driverId: req.params.driverId
-        });
+    const id = req.params.driverId;
+    Driver.findById(id).select(" driverName driverEmail driverPhoneNumber _id")
+    .exec().then(doc =>{
+        console.log("From the database ",doc);
+        //send status and result
+        if(doc){
+            res.status(200).json({
+                driver: doc,
+                request: {
+                    type: 'GET',
+                    description: 'Get all drivers using the url below',
+                    url: 'http://localhost:3000/drivers'
+                }
+            });
+        }else{
+            res.status(404).json({message: 'No valid entry found for provided ID!'});
+        }
+       
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
+    });
     });
 
+//REST API to GET request driver by id
+router.get('/email/:driverEmail', (req, res, next) => {
+    const email = req.params.driverEmail;
+    Driver.find({driverEmail: email}).select(" driverName driverEmail driverPhoneNumber _id")
+    .exec().then(doc =>{
+        console.log("From the database ",doc);
+        //send status and result
+        if(doc){
+            res.status(200).json({
+                driver: doc,
+                request: {
+                    type: 'GET',
+                    description: 'Get all drivers using the url below',
+                    url: 'http://localhost:3000/drivers'
+                }
+            });
+        }else{
+            res.status(404).json({message: 'No valid entry found for provided ID!'});
+        }
+       
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: err});
+    });
+    });
 //REST API to GET request to delete driver by id
 router.delete('/:driverId', (req, res, next) => {
-    res.status(200).json({
-        message: 'Driver deleted',
-        driverId: req.params.driverId
+    const id = req.params.driverId;
+    Driver.remove({_id: id}).exec().then( result =>{
+        console.log(result);
+        res.status(200).json(result);
+    }).catch(err =>  {
+        console.log(err);
+        res.status(500).json({error : err});
     });
 });
 
