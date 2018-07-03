@@ -168,7 +168,7 @@ export default class BookingForm extends React.Component {
             createdAt: moment().valueOf(),
             selectedNoOfAdultsOption: this.state.selectedNoOfAdultsOption
         });
-        console.log('Confirmation submitted successfully!')
+        console.log('Confirmation submitted successfully!');
         console.log(this.state.selectedNoOfAdultsOption);
     }
     render(){

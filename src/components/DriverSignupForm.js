@@ -48,8 +48,11 @@ export default class DriverSignupForm extends React.Component {
             console.log(this.state.phonenumber);
             console.log(this.state.authenticatedUserEmail);
             this.props.onSubmit({ 
+                driverName: this.state.name,
+                driverEmail: this.state.authenticatedUserEmail,
+                driverPhoneNumber: this.state.phonenumber
             });
-
+            console.log('Driver signup completed successfully!');
         }
         
     }

@@ -14,5 +14,6 @@ const database = firebase.database();
 
 //Setup Authentication provider settings
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+const facebookAuProvider = new firebase.auth.FacebookAuthProvider();
 
-export { firebase, googleAuthProvider, database as default };
+export { firebase, googleAuthProvider, facebookAuProvider, database as default };

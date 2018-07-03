@@ -1,10 +1,12 @@
 import React from 'react';
 import DriverSignupForm from './DriverSignupForm';
+import { connect } from 'react-redux';
+import { startSignupDriver } from '../actions/drivers';
 
-export default class DriverSignupPage extends React.Component { 
+export class DriverSignupPage extends React.Component { 
 
 onSubmit = (driver) => {
-  //this.props.startAddBooking(booking);
+  this.props.startSignupDriver(driver);
   this.props.history.push('/dashboard'); 
 };
 render(){
@@ -18,3 +20,9 @@ render(){
   );
 }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  startSignupDriver: (driver) => dispatch(startSignupDriver(driver))
+});
+
+export default connect(undefined, mapDispatchToProps)(DriverSignupPage); //this connect to the drivers store and save the driver record
