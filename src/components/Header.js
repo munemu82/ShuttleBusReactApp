@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { firebase } from '../firebase/firebase';
 import { startLogout } from '../actions/auth';
+import { startSetDriverByEmail } from '../actions/drivers';
 
 let isAuthenticated = false;
 let authenticatedUserEmail ='';
@@ -15,6 +16,9 @@ firebase.auth().onAuthStateChanged((user) => {
     isAuthenticated = false;
   }
 });
+const driverDetails = startSetDriverByEmail({driverEmail: authenticatedUserEmail});
+console.log(driverDetails);
+console.log(authenticatedUserEmail);
 //export const Header = ({startLogout}) => (
 export const Header = () => (
   <header>
@@ -59,7 +63,8 @@ export const Header = () => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  startLogout: () => dispatch(startLogout())
+  startLogout: () => dispatch(startLogout()),
+  startSetDriverByEmail: (email) => dispatch(startSetDriverByEmail(email))
 });
 
 export default connect(undefined, mapDispatchToProps)(Header);

@@ -30,17 +30,16 @@ export const startSignupDriver = (driverData = {} ) =>{
 };
 
 //SET_BOOKINGS
-export const setDriverByEmail = (driver) =>({
+export const setDriverByEmail = ( { driverEmail } = {} ) =>({
     type: 'SET_DRIVER_BY_EMAIL',
     driver
 });
-export const startSetDriverByEmail = () => {
+export const startSetDriverByEmail = ( { driverEmail } = {}) => {
     return (dispatch, getState) =>{
-        let bookings = [];
-        return axios.get(`${ROOT_URL}/api/drivers/email?=`).then( res => {
-            const tempBookings = res.data.bookings;
-            console.log(tempBookings);
-            dispatch(setBookings(tempBookings));
+        return axios.get(`${ROOT_URL}/api/drivers/email/${driverEmail}`).then( res => {
+            const driverDetails = res.data.driver;
+            console.log(driverDetails);
+            dispatch(setDriverByEmail({driverEmail}));
         },
         (error) => { console.log(error) }
      );
