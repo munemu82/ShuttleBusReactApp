@@ -7,10 +7,14 @@ export const login = (uid) =>({
     type: 'LOGIN',
     uid
 });
-export const startLogin = () =>{
+export const startLogin = ( loginProvider) =>{
     return () => {
         //A call back to authentication provider and bring up a login popup screen
-        return firebase.auth().signInWithPopup(googleAuthProvider);
+        if(loginProvider==='google'){
+            return firebase.auth().signInWithPopup(googleAuthProvider);
+        }else{
+            return firebase.auth().signInWithPopup(facebookAuProvider);
+        } 
     };
 };
 export const startFaceBookLogin = () =>{
