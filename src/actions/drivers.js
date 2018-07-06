@@ -30,16 +30,43 @@ export const startSignupDriver = (driverData = {} ) =>{
 };
 
 //SET_BOOKINGS
-export const setDriverByEmail = ( { driverEmail } = {} ) =>({
+export const setDriverByEmail = (driverEmail) =>({
     type: 'SET_DRIVER_BY_EMAIL',
-    driver
+    driverEmail
 });
-export const startSetDriverByEmail = ( { driverEmail } = {}) => {
+export const startSetDriverByEmail = ( driverEmail ) => {
     return (dispatch, getState) =>{
         return axios.get(`${ROOT_URL}/api/drivers/email/${driverEmail}`).then( res => {
             const driverDetails = res.data.driver;
             console.log(driverDetails);
-            dispatch(setDriverByEmail({driverEmail}));
+            dispatch(setDriverByEmail(driverEmail));
+        },
+        (error) => { console.log(error) }
+     );
+    }
+}
+export const getDriverByEmail = (email) => {
+    return axios.get(`${ROOT_URL}/api/drivers/email/${email}`).then( res => {
+        const driverDetails = res.data.driver;
+        console.log(driverDetails)
+    },
+    (error) => { console.log(error) }
+ );
+}
+
+//SET_DRIVERS
+export const setDrivers = (drivers) =>({
+    type: 'SET_DRIVERS',
+    drivers
+});
+export const startSetDrivers = () => {
+    return (dispatch, getState) =>{
+        const uid = getState().auth.uid;
+        return axios.get(`${ROOT_URL}/api/drivers/`).then( res => {
+            const drivers = res.data.drivers;
+
+            console.log(drivers);
+            dispatch(setDrivers(drivers));
         },
         (error) => { console.log(error) }
      );

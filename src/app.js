@@ -4,6 +4,7 @@ import {Provider } from 'react-redux';
 import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import {startSetBookings } from './actions/bookings';
+import {startSetDrivers, startSetDriverByEmail } from './actions/drivers';
 import { login, logout } from './actions/auth';
 import getVisibleBookings from './selectors/bookings';
 import 'normalize.css/normalize.css';
@@ -15,6 +16,7 @@ import { firebase } from './firebase/firebase';
 const bookingStore = configureStore();
 
 const state = bookingStore.getState();
+
 //const visibleBookings = getVisibleBookings(state.bookings, state.filters);
 
 //console.log(visibleBookings)  //print current store state
@@ -33,10 +35,6 @@ const renderApp = () =>{
 
 ReactDOM.render(<p>Loading....</p>, document.getElementById('app'));
 
-/* bookingStore.dispatch(startSetBookings()).then( () =>{
-    ReactDOM.render(jsx, document.getElementById('app'));
-}); */
-
 //Tracking authentication states
 firebase.auth().onAuthStateChanged((user) => {
     //checking if user logged in 
@@ -47,8 +45,13 @@ firebase.auth().onAuthStateChanged((user) => {
         if(history.location.pathname === '/login'){
             history.push('/dashboard');
         }
-        console.log(user);
+       // console.log(user);
         console.log(user.email);
+        //get all drivers
+        bookingStore.dispatch(startSetDrivers());
+        //get driver by email
+       // bookingStore.dispatch(startSetDriverByEmail(user.email));
+       // bookingStore.dispatch(getDriverByEmail(user.email));
     });
     }else{
         bookingStore.dispatch(logout());

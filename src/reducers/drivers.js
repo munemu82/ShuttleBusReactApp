@@ -15,6 +15,8 @@ export default ( state = {}, action ) => {
                     return "No driver matches to the email";
                 }
             })
+        case 'SET_DRIVERS':
+            return action.drivers;
         default:
             return state;
     }

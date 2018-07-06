@@ -3,22 +3,29 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { firebase } from '../firebase/firebase';
 import { startLogout } from '../actions/auth';
-import { startSetDriverByEmail } from '../actions/drivers';
+import { getDriverByEmail } from '../actions/drivers';
 
 let isAuthenticated = false;
 let authenticatedUserEmail ='';
+let isDriver = false;
 
 firebase.auth().onAuthStateChanged((user) => {
   if(user){
     isAuthenticated = true;
     authenticatedUserEmail = user.email;
+    const driverDetails = getDriverByEmail(authenticatedUserEmail).then( () =>{
+      if(driverDetails.length > 0){
+        isDriver = true;
+        console.log(driverDetails);
+      }
+    });
   }else{
     isAuthenticated = false;
   }
 });
-const driverDetails = startSetDriverByEmail({driverEmail: authenticatedUserEmail});
-console.log(driverDetails);
+
 console.log(authenticatedUserEmail);
+console.log(isDriver);
 //export const Header = ({startLogout}) => (
 export const Header = () => (
   <header>
@@ -54,6 +61,7 @@ export const Header = () => (
        <li><NavLink to="/" activeClassName="is-active" exact={true}>Home</NavLink></li>
        <li><NavLink to="/dashboard" activeClassName="is-active">Dashboard</NavLink></li>
        <li><NavLink to="/create" activeClassName="is-active">Book a Ride</NavLink></li>
+       {isDriver && <li><NavLink to="/driversignup" activeClassName="is-active">Become a driver</NavLink></li>}
        <li><NavLink to="/partners" activeClassName="is-active">Partners</NavLink></li>
        <li><NavLink to="/aboutUs" activeClassName="is-active">About Us</NavLink></li>
        <li><NavLink to="/contactUs" activeClassName="is-active">Contact Us</NavLink></li>
