@@ -13,7 +13,8 @@ const bookingSchema = mongoose.Schema({
     tripPrice: {type: Number, required: true},
     status: {type: String, required: true},
     createdAt:{type: Number, required: true},
-    selectedNoOfAdultsOption: {type: Number, required: true}
+    selectedNoOfAdultsOption: {type: Number, required: true},
+    userEmail:{type: String, required: true}
 });
 
 module.exports = mongoose.model('Booking', bookingSchema);

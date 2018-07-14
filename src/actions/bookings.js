@@ -24,12 +24,13 @@ export const startAddBooking = (bookingData = {} ) =>{
             tripPrice=0, 
             status='Initialized',
             createdAt=0,
-            selectedNoOfAdultsOption=0
+            selectedNoOfAdultsOption=0,
+            userEmail=''
         } = bookingData;
       // const booking = { clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt};
        // const bookingInJSON = JSON.stringify(booking);
         return axios.post(`${ROOT_URL}/api/bookings/`, {
-            clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption
+            clientName, pickupAddress, destinationAddress, pickupDate, pickupTime, tripPrice, status, createdAt, selectedNoOfAdultsOption, userEmail
         }).then(res => {
         /*     res.headers(
                 "Access-Control-Allow-Origin", "*",
@@ -84,12 +85,27 @@ export const setBookings = (bookings) =>({
 });
 export const startSetBookings = () => {
     return (dispatch, getState) =>{
-        const uid = getState().auth.uid;
-        let bookings = [];
+        let userBookings = [];
         return axios.get(`${ROOT_URL}/api/bookings/`).then( res => {
-            const tempBookings = res.data.bookings;
-            console.log(tempBookings);
-            dispatch(setBookings(tempBookings));
+            const allBookings = res.data.bookings;
+            console.log(allBookings);
+            console.log(sessionStorage.getItem('userInfo'));
+            allBookings.forEach(function(element) {
+               // console.log(element);
+              // if user is set then retrieve bookings only belong to them
+                if(element.userEmail ===sessionStorage.getItem('userInfo')){
+                    console.log(element);
+                    userBookings.push(element);
+                }
+            });
+            const driverInfo = sessionStorage.getItem('driverInfo');
+            //Check if user is a driver, if is a driver, then retrieve all bookings for them
+            if(sessionStorage.getItem('userInfo') === driverInfo){
+                console.log(allBookings);
+                dispatch(setBookings(allBookings));
+            }else{  //if user is not a driver, then retrieve bookings only belong to them
+                dispatch(setBookings(userBookings));
+            } 
         },
         (error) => { console.log(error) }
      );

@@ -7,7 +7,7 @@ const Booking = require('../models/booking');
 
 //REST API to GET request bookings
 router.get('/', (req, res, next) => {
-    Booking.find().select("_id clientName pickupAddress destinationAddress pickupDate pickupTime tripPrice status createdAt")
+    Booking.find().select("_id clientName pickupAddress destinationAddress pickupDate pickupTime tripPrice status createdAt selectedNoOfAdultsOption userEmail")
     .exec().then( docs =>{
         const response = {
             count: docs.length,
@@ -22,6 +22,8 @@ router.get('/', (req, res, next) => {
                     tripPrice: doc.tripPrice,
                     status: doc.status,
                     createdAt: doc.createdAt,
+                    selectedNoOfAdultsOption: doc.selectedNoOfAdultsOption,
+                    userEmail: doc.userEmail,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3000/bookings/'+doc._id
@@ -56,7 +58,8 @@ router.post('/', (req, res, next) => {
         tripPrice: req.body.tripPrice,
         status: req.body.status,
         createdAt:req.body.createdAt,
-        selectedNoOfAdultsOption: req.body.selectedNoOfAdultsOption
+        selectedNoOfAdultsOption: req.body.selectedNoOfAdultsOption,
+        userEmail: req.body.userEmail
     });
     //save booking to the MongoDB Database
     booking.save().then(result =>{

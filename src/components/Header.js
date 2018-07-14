@@ -14,9 +14,10 @@ firebase.auth().onAuthStateChanged((user) => {
   if(user){
     isAuthenticated = true;
     authenticatedUserEmail = user.email;
-    const currentDriverInfo = window.sessionStorage.getItem("driverInfo");
-    console.log(window.sessionStorage.getItem("driverInfo"));
-    isDriver = Object.keys(currentDriverInfo[0]).length != 0;
+    const currentDriverInfo = sessionStorage.getItem("driverInfo");
+    if(currentDriverInfo){
+      isDriver = Object.keys(currentDriverInfo[0]).length != 0;
+    }
     console.log(isDriver);
     /* if(!isDriver){
       isDriver = true;
@@ -25,7 +26,6 @@ firebase.auth().onAuthStateChanged((user) => {
     isAuthenticated = false;
   }
 });
-console.log(window.sessionStorage.getItem('userInfo'));
 //export const Header = ({startLogout}) => (
 export const Header = () => (
   <header>

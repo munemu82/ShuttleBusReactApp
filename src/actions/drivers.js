@@ -41,7 +41,7 @@ export const startSetDriverByEmail = ( driverEmail ) => {
             driverDetails = res.data.driver;
             const infoInJson = JSON.stringify(driverDetails); 
             console.log(infoInJson);
-            window.sessionStorage.setItem("driverInfo", driverDetails);
+            sessionStorage.setItem("driverInfo", driverDetails[0].driverEmail);
             dispatch(setDriverByEmail(driverDetails));
         },
         (error) => { console.log(error) }

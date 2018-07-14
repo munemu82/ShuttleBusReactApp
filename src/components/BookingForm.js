@@ -4,9 +4,8 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import { SingleDatePicker } from 'react-dates';
 import AddressInputFieldFunc, { SingleInputField, CheckboxOrRadioGroup } from './bookingForm/bookingFormFields';
 import calculateDistance, {getLatLonFromAddress, getDistanceFromLatLonInKm } from '../geocoding/locationCoding';
-import { convertDateToMilliseconds, getDateFromMillisec, isAllowedBooking, getTimeFromDate } from '../utilities/manageDates';
-import Form, { Button, ControlLabel, FormControl} from 'react-bootstrap';
-import Request from 'superagent';
+import { isAllowedBooking, getTimeFromDate } from '../utilities/manageDates';
+import { ControlLabel} from 'react-bootstrap';
 import SelectField from './bookingForm/SelectField';
 import TimePicker from 'react-time-picker';
 import { computeBookingFare, roundNumber } from '../utilities/bookingCalculations';
@@ -33,7 +32,8 @@ export default class BookingForm extends React.Component {
             noOfAdultPassenrsOptions: [],noOfChildrenPassenrsOptions: [],paymentOptions: [],
             selectedNoOfAdultsOption: '', selectedNoOfChildrenOption: '', selectedPayment: '',
             noOfHoursBeforePickup: '',
-            baseBookingFare: '', farePerMinute:'', farePerKm:''
+            baseBookingFare: '', farePerMinute:'', farePerKm:'',
+            userEmail: sessionStorage.getItem('userInfo')
         };
         this.handlePaymentOptionSelection = this.handlePaymentOptionSelection.bind(this);
     }
@@ -53,6 +53,7 @@ export default class BookingForm extends React.Component {
                     paymentOptions: data.paymentOptions
 				});
             });
+        console.log(this.state.userEmail);
     }
     //FORM PROCESSING HANDLERS
     onClientNameChange = (e) => {
@@ -118,6 +119,7 @@ export default class BookingForm extends React.Component {
         let bookingData = Object.assign({}, this.state.bookingData);
        console.log(isAllowedBooking(this.state.pickupDate, this.state.pickupTime, this.state.noOfHoursBeforePickup));
        console.log(this.state.pickupTime);
+       console.log(this.state.userEmail);
        if(this.state.clientName===''){
             error.clientNameError = 'Client name is a required field, please enter your details';
             this.setState( () => ({error}));
@@ -166,7 +168,8 @@ export default class BookingForm extends React.Component {
             tripPrice: this.state.tripPrice,
             status: this.state.status,
             createdAt: moment().valueOf(),
-            selectedNoOfAdultsOption: this.state.selectedNoOfAdultsOption
+            selectedNoOfAdultsOption: this.state.selectedNoOfAdultsOption,
+            userEmail: this.state.userEmail
         });
         console.log('Confirmation submitted successfully!');
         console.log(this.state.selectedNoOfAdultsOption);

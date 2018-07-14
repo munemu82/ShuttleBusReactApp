@@ -38,10 +38,13 @@ ReactDOM.render(<p>Loading....</p>, document.getElementById('app'));
 firebase.auth().onAuthStateChanged((user) => {
     //checking if user logged in 
     if(user){         //check if user is logged in, if so then get their bookings- later, we will add a check to see if user is admin or driver so that we can get all the bookings
-        window.sessionStorage.setItem("userInfo", user.email);
+        //localStorage.setItem("userInfo", user.email);
+        sessionStorage.setItem("userInfo", user.email);
+        
+        // console.log(user);
+        console.log(user.email);
         bookingStore.dispatch(startSetDriverByEmail(user.email)).then( (result) =>{
             console.log('THis is from the app');
-            console.log(result);
             const state = bookingStore.getState();
             console.log(state);
         });
@@ -52,8 +55,6 @@ firebase.auth().onAuthStateChanged((user) => {
             location.reload();
             history.push('/dashboard');
         }
-       // console.log(user);
-        console.log(user.email);
         //get all drivers
         //bookingStore.dispatch(startSetDrivers());
         
@@ -67,6 +68,8 @@ firebase.auth().onAuthStateChanged((user) => {
         renderApp();
         history.push('/');
         console.log('Is Logged Out!');
+        // Remove all saved data from sessionStorage
+        sessionStorage.clear();
     }
 });
 
