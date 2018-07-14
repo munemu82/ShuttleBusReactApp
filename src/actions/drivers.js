@@ -35,11 +35,14 @@ export const setDriverByEmail = (driverEmail) =>({
     driverEmail
 });
 export const startSetDriverByEmail = ( driverEmail ) => {
+    let driverDetails = [];
     return (dispatch, getState) =>{
         return axios.get(`${ROOT_URL}/api/drivers/email/${driverEmail}`).then( res => {
-            const driverDetails = res.data.driver;
-            console.log(driverDetails);
-            dispatch(setDriverByEmail(driverEmail));
+            driverDetails = res.data.driver;
+            const infoInJson = JSON.stringify(driverDetails); 
+            console.log(infoInJson);
+            window.sessionStorage.setItem("driverInfo", driverDetails);
+            dispatch(setDriverByEmail(driverDetails));
         },
         (error) => { console.log(error) }
      );
@@ -48,7 +51,6 @@ export const startSetDriverByEmail = ( driverEmail ) => {
 export const getDriverByEmail = (email) => {
     return axios.get(`${ROOT_URL}/api/drivers/email/${email}`).then( res => {
         const driverDetails = res.data.driver;
-        console.log(driverDetails)
     },
     (error) => { console.log(error) }
  );
@@ -64,7 +66,6 @@ export const startSetDrivers = () => {
         const uid = getState().auth.uid;
         return axios.get(`${ROOT_URL}/api/drivers/`).then( res => {
             const drivers = res.data.drivers;
-
             console.log(drivers);
             dispatch(setDrivers(drivers));
         },

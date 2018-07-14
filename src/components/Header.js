@@ -3,29 +3,29 @@ import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { firebase } from '../firebase/firebase';
 import { startLogout } from '../actions/auth';
-import { getDriverByEmail } from '../actions/drivers';
+
 
 let isAuthenticated = false;
 let authenticatedUserEmail ='';
 let isDriver = false;
+//console.log(window.sessionStorage.getItem("isDriver"));
 
 firebase.auth().onAuthStateChanged((user) => {
   if(user){
     isAuthenticated = true;
     authenticatedUserEmail = user.email;
-    const driverDetails = getDriverByEmail(authenticatedUserEmail).then( () =>{
-      if(driverDetails.length > 0){
-        isDriver = true;
-        console.log(driverDetails);
-      }
-    });
+    const currentDriverInfo = window.sessionStorage.getItem("driverInfo");
+    console.log(window.sessionStorage.getItem("driverInfo"));
+    isDriver = Object.keys(currentDriverInfo[0]).length != 0;
+    console.log(isDriver);
+    /* if(!isDriver){
+      isDriver = true;
+    } */
   }else{
     isAuthenticated = false;
   }
 });
-
-console.log(authenticatedUserEmail);
-console.log(isDriver);
+console.log(window.sessionStorage.getItem('userInfo'));
 //export const Header = ({startLogout}) => (
 export const Header = () => (
   <header>
@@ -52,16 +52,15 @@ export const Header = () => (
             Login
         </Link> 
       }
-      {isAuthenticated && <p>Hi {authenticatedUserEmail}  <Link to={'/driversignup'} className="btn btn-primary btn-lg" >
-        Driver Signup
-        </Link><button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button> </p>}
+      {isAuthenticated && <p>Hi {authenticatedUserEmail}  
+        <button className="btn btn-warning btn-lg" onClick={startLogout}> Logout</button> </p>}
     </div>
     <div>
       <ul className="headerNav">
        <li><NavLink to="/" activeClassName="is-active" exact={true}>Home</NavLink></li>
        <li><NavLink to="/dashboard" activeClassName="is-active">Dashboard</NavLink></li>
        <li><NavLink to="/create" activeClassName="is-active">Book a Ride</NavLink></li>
-       {isDriver && <li><NavLink to="/driversignup" activeClassName="is-active">Become a driver</NavLink></li>}
+    {!isDriver && <li><NavLink to="/driversignup" activeClassName="is-active">Become a driver</NavLink></li>}
        <li><NavLink to="/partners" activeClassName="is-active">Partners</NavLink></li>
        <li><NavLink to="/aboutUs" activeClassName="is-active">About Us</NavLink></li>
        <li><NavLink to="/contactUs" activeClassName="is-active">Contact Us</NavLink></li>
@@ -70,9 +69,8 @@ export const Header = () => (
  </header>
 );
 
-const mapDispatchToProps = (dispatch) => ({
-  startLogout: () => dispatch(startLogout()),
-  startSetDriverByEmail: (email) => dispatch(startSetDriverByEmail(email))
+const mapDispatchToProps = (dispatch, state) => ({
+  startLogout: () => dispatch(startLogout())
 });
 
 export default connect(undefined, mapDispatchToProps)(Header);

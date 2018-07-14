@@ -6,5 +6,4 @@ const driverSchema = mongoose.Schema({
     driverEmail: {type: String, required: true},
     driverPhoneNumber: {type: String, required: true}
 });
-
 module.exports = mongoose.model('Driver', driverSchema);

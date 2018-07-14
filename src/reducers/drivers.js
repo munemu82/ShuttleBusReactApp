@@ -1,4 +1,6 @@
-export default ( state = {}, action ) => {
+const driversReducerDefaultState = [];
+
+const driversReducer = (state = driversReducerDefaultState, action) =>{
     switch(action.type){
         case 'SIGNUP_DRIVER':
             return [    
@@ -21,3 +23,4 @@ export default ( state = {}, action ) => {
             return state;
     }
 };
+export default driversReducer;

@@ -9,8 +9,9 @@ const bookingRoutes = require('./routes/bookings');
 const driverRoutes = require('./routes/drivers');
 
 //Setup MongoDB connection
-mongoose.connect('mongodb://amos:82Maniraki@ds159100.mlab.com:59100/westxshuttlebus',
-{
+const liveMongoDB_URL = 'mongodb://amos:82Maniraki@ds159100.mlab.com:59100/westxshuttlebus';
+const localMongoDB_URL = 'mongodb://127.0.0.1:27017/westxshuttlebus'
+mongoose.connect(localMongoDB_URL,{
     useMongoClient: true
 }
 );

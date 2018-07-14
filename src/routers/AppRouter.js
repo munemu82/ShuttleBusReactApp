@@ -14,6 +14,7 @@ import { Header } from '../components/Header';
 import DriverSignupPage from '../components/DriverSignupPage';
 import Footer from '../components/Footer';
 import PrivateRoute from './PrivateRoute';
+import DriverRoute from './DriverRoute';
 
 export const history = createHistory();
 
