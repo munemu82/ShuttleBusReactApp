@@ -158,6 +158,12 @@ export default class BookingForm extends React.Component {
         e.preventDefault();
         console.log(this.state.selectedPayment);
         console.log(this.state.clientName);
+        let bookingStatus = '';
+        if(this.state.selectedPayment !='PayPal'){
+            bookingStatus = 'Pending Payment';
+        }else{
+            bookingStatus = this.state.status;
+        }
         this.props.onSubmit({
             clientName: this.state.clientName,
             pickupAddress: this.state.pickupAddress,
@@ -166,7 +172,7 @@ export default class BookingForm extends React.Component {
             pickupTime:this.state.pickupTime,
            // tripPrice: numeral(this.state.tripPrice).format('$0,0.00'),
             tripPrice: this.state.tripPrice,
-            status: this.state.status,
+            status: bookingStatus,
             createdAt: moment().valueOf(),
             selectedNoOfAdultsOption: this.state.selectedNoOfAdultsOption,
             userEmail: this.state.userEmail

@@ -20,3 +20,11 @@
   margin: 0 0 $m-size 0;
   line-height: 1;
 }
+.homePage-layout {
+  align-items: left;
+  background: url('/images/intro-bg.jpeg');
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
